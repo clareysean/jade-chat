@@ -1,88 +1,104 @@
-import { Component } from "react";
-import { signUp } from "../../utilities/users-service";
+import { UserContext } from '../../pages/App/App'
+import { signUp } from '../../utilities/users-service'
+import { useState, useContext } from 'react'
 
-export default class SignUpForm extends Component {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-    confirm: "",
-    error: "",
-  };
+export default function SignUpForm() {
+    const { user, setUser } = useContext(UserContext)
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirm: '',
+    })
 
-  handleChange = (evt) => {
-    this.setState({
-      [evt.target.name]: evt.target.value,
-      error: "",
-    });
-  };
+    const [error, setError] = useState('')
 
-  handleSubmit = async (evt) => {
-    // Prevent form from being submitted to the server
-    evt.preventDefault();
-    try {
-      const formData = { ...this.state };
-      delete formData.error;
-      delete formData.confirm;
-
-      const user = await signUp(formData);
-      //   see below for other destructuring options *
-      console.log(user);
-      this.props.setUser(user);
-    } catch {
-      // An error occurred
-      this.setState({ error: "Sign Up Failed - Try Again" });
+    const handleChange = (evt) => {
+        setFormData({
+            ...formData,
+            [evt.target.name]: evt.target.value,
+        })
+        setError('')
     }
-  };
 
-  //  * const formData = { name: this.state.name, emai: this.state.email, password: this.state.password };
-  // or const {name, email, password} = this.state; const formData = {name, email, password}
+    const handleSubmit = async (evt) => {
+        evt.preventDefault()
 
-  render() {
-    const disable = this.state.password !== this.state.confirm;
+        if (formData.password !== formData.confirm) {
+            setError('Password and confirm password must match.')
+            return
+        }
+
+        try {
+            const user = await signUp(formData)
+            // You should replace signUp with your actual sign-up function.
+            console.log(user)
+            setUser(user)
+        } catch {
+            setError('Sign Up Failed - Try Again')
+        }
+    }
+
     return (
-      <div>
-        <div className="form-container">
-          <form autoComplete="off" onSubmit={this.handleSubmit}>
-            <label>Name</label>
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-              required
-            />
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              required
-            />
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-              required
-            />
-            <label>Confirm</label>
-            <input
-              type="password"
-              name="confirm"
-              value={this.state.confirm}
-              onChange={this.handleChange}
-              required
-            />
-            <button type="submit" disabled={disable}>
-              SIGN UP
-            </button>
-          </form>
+        <div>
+            <div className="w-96">
+                <form autoComplete="off" onSubmit={handleSubmit}>
+                    <label className="block text-sm font-medium text-gray-700">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    />
+                    <label className="mt-3 block text-sm font-medium text-gray-700">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    />
+                    <label className="mt-3 block text-sm font-medium text-gray-700">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    />
+                    <label className="mt-3 block text-sm font-medium text-gray-700">
+                        Confirm
+                    </label>
+                    <input
+                        type="password"
+                        name="confirm"
+                        value={formData.confirm}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    />
+                    <button
+                        type="submit"
+                        disabled={formData.password !== formData.confirm}
+                        className="mt-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:bg-green-700 focus:outline-none"
+                    >
+                        SIGN UP
+                    </button>
+                </form>
+            </div>
+            {error && (
+                <p className="error-message mt-2 text-red-500">{error}</p>
+            )}
         </div>
-        <p className="error-message">&nbsp;{this.state.error}</p>
-      </div>
-    );
-  }
+    )
 }

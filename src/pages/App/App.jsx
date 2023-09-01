@@ -6,7 +6,7 @@ import AuthPage from '../AuthPage/AuthPage'
 import NavBar from '../../components/NavBar/NavBar'
 import ProfilePage from '../ProfilePage/ProfilePage'
 
-export const UserContext = createContext()
+export const UserContext = createContext({})
 
 export default function App() {
     const [user, setUser] = useState(null)
@@ -21,20 +21,20 @@ export default function App() {
     }, [])
 
     return (
-        <main className="App">
-            {user ? (
-                <>
-                    <UserContext.Provider value={{ user, setUser }}>
-                        <NavBar user={user} setUser={setUser} />
+        <UserContext.Provider value={{ user, setUser }}>
+            <main className="App">
+                {user ? (
+                    <>
+                        <NavBar />
                         <Routes>
                             {/* Route components in here */}
                             <Route path="/profile" element={<ProfilePage />} />
                         </Routes>
-                    </UserContext.Provider>
-                </>
-            ) : (
-                <AuthPage setUser={setUser} />
-            )}
-        </main>
+                    </>
+                ) : (
+                    <AuthPage />
+                )}
+            </main>
+        </UserContext.Provider>
     )
 }

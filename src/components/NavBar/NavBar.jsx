@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import * as userService from '../../utilities/users-service'
+import { useContext } from 'react'
+import { UserContext } from '../../pages/App/App'
 
-export default function NavBar({ user, setUser }) {
+export default function NavBar() {
+    const { user, setUser } = useContext(UserContext)
     function handleLogOut() {
         // Delegate to the users-service
         userService.logOut()
