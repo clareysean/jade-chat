@@ -47,7 +47,7 @@ export default function LoginForm() {
                             value={credentials.email}
                             onChange={handleChange}
                             required
-                            className="mt-1 w-full rounded-md border-gray-300 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                            className="mt-1 w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                         />
                     </div>
                     <div className="mb-4">
@@ -64,7 +64,7 @@ export default function LoginForm() {
                             value={credentials.password}
                             onChange={handleChange}
                             required
-                            className="mt-1 w-full rounded-md border-gray-300 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                            className="mt-1 w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                         />
                     </div>
                     <div className="text-center">

@@ -77,7 +77,7 @@ export default function SignUpForm() {
                         className="mt-1 block w-full rounded-md border-2 border-slate-100 p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                     />
                     <label className="mt-3 block text-sm font-medium text-gray-700">
-                        Confirm
+                        Confirm Password
                     </label>
                     <input
                         type="password"
