@@ -5,6 +5,7 @@ import './App.css'
 import AuthPage from '../AuthPage/AuthPage'
 import NavBar from '../../components/NavBar/NavBar'
 import ProfilePage from '../ProfilePage/ProfilePage'
+import ChatRoom from '../ChatRoom/ChatRoom'
 
 export const UserContext = createContext({})
 
@@ -22,10 +23,11 @@ export default function App() {
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
-            <main className="App">
+            <main className="App h-screen w-full">
                 {user ? (
                     <>
                         <NavBar />
+                        <ChatRoom />
                         <Routes>
                             {/* Route components in here */}
                             <Route path="/profile" element={<ProfilePage />} />
