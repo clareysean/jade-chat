@@ -1,4 +1,4 @@
-import React from 'react'
+import { React } from 'react'
 import ConvoWindow from '../../components/ConvoWindow/ConvoWindow'
 import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'

@@ -26,10 +26,9 @@ export default function App() {
         async function fetchActiveUsers() {
             const fetchedActiveUsers = await getActiveUsers()
             setActiveUsers(fetchedActiveUsers)
-            console.log(activeUsers)
         }
         fetchActiveUsers()
-    }, [])
+    }, [user])
 
     return (
         <ActiveUsersContext.Provider value={{ activeUsers, setActiveUsers }}>

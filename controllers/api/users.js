@@ -62,8 +62,7 @@ function checkToken(req, res) {
 }
 
 async function getActiveUsers(req, res) {
-    console.log(`in the controller`)
-    const activeUsers = await User.find()
-    console.log(activeUsers)
+    const currentUserId = req.user._id
+    const activeUsers = await User.find({ _id: { $ne: currentUserId } })
     return res.json(activeUsers)
 }
