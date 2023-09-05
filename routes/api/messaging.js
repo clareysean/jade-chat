@@ -4,6 +4,6 @@ const messagingCtrl = require('../../controllers/api/messaging')
 const ensureLoggedIn = require('../../config/ensureLoggedIn')
 
 // POST /api/users
-router.post('/', messagingCtrl.create)
+router.post('/', ensureLoggedIn, messagingCtrl.create)
 
 module.exports = router

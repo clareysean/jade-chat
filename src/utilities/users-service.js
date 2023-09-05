@@ -25,6 +25,11 @@ export function getUser() {
     // token is an encrypted string which represends a json object which containes a user key. atob is the decode util
 }
 
+export async function getActiveUsers() {
+    const activeUsers = await usersAPI.getActiveUsers()
+    return activeUsers
+}
+
 export async function signUp(userData) {
     // Delegate the network request code to the users-api.js API module
     // which will ultimately return a JSON Web Token (JWT)

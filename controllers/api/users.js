@@ -6,6 +6,7 @@ module.exports = {
     create,
     login,
     checkToken,
+    getActiveUsers,
 }
 
 async function create(req, res) {
@@ -58,4 +59,11 @@ function checkToken(req, res) {
     // because of config/checkToken, which modifies the request by extracting the token from Auth header and parsing user and exp data.
     console.log('req.user', req.user)
     res.json(req.exp)
+}
+
+async function getActiveUsers(req, res) {
+    console.log(`in the controller`)
+    const activeUsers = await User.find()
+    console.log(activeUsers)
+    return res.json(activeUsers)
 }
