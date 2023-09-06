@@ -5,12 +5,11 @@ import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
 import { UserContext } from '../App/App'
 
-export const ConvoContext = createContext({})
+export const ConvoContext = createContext([])
 
 export default function ChatRoom() {
     const [convos, setConvos] = useState(null)
-    const [currentConvo, setCurrentConvo] = useState([])
-    const { user, setUser } = useContext(UserContext)
+    const [currentConvo, setCurrentConvo] = useState({})
 
     useEffect(() => {
         async function fetchConvos() {
@@ -23,7 +22,7 @@ export default function ChatRoom() {
 
     return (
         <div className="container flex h-screen w-full gap-2">
-            <ConvoContext.Provider value={{ currentConvo, setCurrentConvo }}>
+            <ConvoContext.Provider value={[currentConvo, setCurrentConvo]}>
                 <ConvoWindow convos={convos} />
                 <ChatWindow />
                 <ContactsWindow />

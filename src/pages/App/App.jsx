@@ -7,8 +7,8 @@ import NavBar from '../../components/NavBar/NavBar'
 import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
 
-export const UserContext = createContext({})
-export const ActiveUsersContext = createContext({})
+export const UserContext = createContext([])
+export const ActiveUsersContext = createContext([])
 
 export default function App() {
     const [user, setUser] = useState(null)

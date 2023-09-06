@@ -3,7 +3,6 @@ import { ActiveUsersContext, UserContext } from '../../pages/App/App'
 import ContactCard from '../ContactCard/ContactCard'
 
 export default function ContactsWindow() {
-    const { user, setUser } = useContext(UserContext)
     const { activeUsers, setActiveUsers } = useContext(ActiveUsersContext)
 
     return (

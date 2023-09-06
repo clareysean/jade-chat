@@ -3,10 +3,10 @@ import ConvoCard from '../ConvoCard/ConvoCard'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ConvoWindow({ convos }) {
-    const { currentConvos, setCurrentConvos } = useContext(ConvoContext)
+    const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
     function handleConvoSelect(convo) {
-        console.log(convo)
+        setCurrentConvo(convo)
     }
 
     return (
