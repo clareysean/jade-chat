@@ -4,6 +4,7 @@ module.exports = {
     create,
     getAllConvos,
     createConvo,
+    delete: deleteConvo,
 }
 
 async function create(req, res) {
@@ -33,5 +34,18 @@ async function createConvo(req, res) {
     } catch (error) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+async function deleteConvo(req, res) {
+    try {
+        const convoId = req.params.id
+        console.log(convoId)
+        const deletedConvo = await Conversation.findByIdAndDelete(convoId)
+        console.log(deletedConvo)
+        res.json(deletedConvo)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(404).json({ error: 'Document not found' })
     }
 }

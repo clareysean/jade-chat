@@ -8,3 +8,8 @@ export function getConvos() {
 export function createConvo() {
     return sendRequest(`${BASE_URL}/conversations`, 'POST')
 }
+
+export function removeConvo(convoId) {
+    console.log(convoId)
+    return sendRequest(`${BASE_URL}/${convoId}`, 'DELETE')
+}

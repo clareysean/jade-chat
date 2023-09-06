@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
-export default function ConvoCard({ convo, handleConvoSelect }) {
+export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const convoUsersLength = convo.users.length
 
@@ -26,6 +26,12 @@ export default function ConvoCard({ convo, handleConvoSelect }) {
                     </span>
                 </Fragment>
             ))}
+            <button
+                className="btn my-1 rounded bg-emerald-800 p-2 text-xs text-white"
+                onClick={deleteConvo}
+            >
+                Delete Conversation
+            </button>
         </div>
     )
 }

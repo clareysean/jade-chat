@@ -9,3 +9,8 @@ export async function createConvo() {
     const newConvo = await messagingAPI.createConvo()
     return newConvo
 }
+
+export async function removeConvo(convoId) {
+    const removedConvo = await messagingAPI.removeConvo(convoId)
+    return removedConvo
+}

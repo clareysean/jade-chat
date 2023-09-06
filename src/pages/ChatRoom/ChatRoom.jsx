@@ -1,6 +1,10 @@
 import { React, useEffect, useState, useContext, createContext } from 'react'
 import { addUserToConvo } from '../../utilities/users-service'
-import { getConvos, createConvo } from '../../utilities/messaging-service'
+import {
+    getConvos,
+    createConvo,
+    removeConvo,
+} from '../../utilities/messaging-service'
 import ConvoWindow from '../../components/ConvoWindow/ConvoWindow'
 import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
@@ -38,12 +42,17 @@ export default function ChatRoom() {
         setCurrentConvo(updatedConvo)
     }
 
+    const deleteConvo = async (convoId) => {
+        const deletedConvo = await removeConvo(convoId)
+    }
+
     return (
         <div className="container flex h-screen w-full gap-2">
             <ConvoContext.Provider value={[currentConvo, setCurrentConvo]}>
                 <ConvoWindow
                     convos={convos}
                     handleCreateConvo={handleCreateConvo}
+                    deleteConvo={deleteConvo}
                 />
                 <ChatWindow />
                 <ContactsWindow addToConvo={addToConvo} />

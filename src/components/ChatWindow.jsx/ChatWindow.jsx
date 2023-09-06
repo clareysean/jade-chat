@@ -1,4 +1,4 @@
-import { React, useState, useContext, useEffect } from 'react'
+import { React, useState, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ChatWindow() {
@@ -26,12 +26,12 @@ export default function ChatWindow() {
     return (
         <div id="container" className="bg-emerald-100">
             {currentConvo?.users.map((user, i) => (
-                <>
+                <Fragment key={user._id}>
                     <span>
                         {user.name}
                         {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
                     </span>
-                </>
+                </Fragment>
             ))}
             <div
                 id="chat-window"

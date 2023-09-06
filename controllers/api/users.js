@@ -87,5 +87,3 @@ async function addToConvo(req, res) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
-
-// gotta retrieve the current convo id and pass it

@@ -5,6 +5,7 @@ const ensureLoggedIn = require('../../config/ensureLoggedIn')
 
 // POST /api/users
 router.post('/', ensureLoggedIn, messagingCtrl.create)
+router.delete('/:id', ensureLoggedIn, messagingCtrl.delete)
 router.post('/conversations', ensureLoggedIn, messagingCtrl.createConvo)
 router.get('/conversations', ensureLoggedIn, messagingCtrl.getAllConvos)
 
