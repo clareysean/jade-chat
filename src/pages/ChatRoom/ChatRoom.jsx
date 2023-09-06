@@ -24,11 +24,15 @@ export default function ChatRoom() {
         fetchConvos()
     }, [])
 
-    const handleCreateConvo = async () => {
-        const newConvo = await createConvo()
+    const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos()
         setConvos(fetchedConvos)
-        setCurrentConvo(newConvo)
+        setCurrentConvo(updatedCurrent)
+    }
+
+    const handleCreateConvo = async () => {
+        const newConvo = await createConvo()
+        refreshState(newConvo)
     }
 
     const addToConvo = async (contactId) => {
@@ -37,13 +41,13 @@ export default function ChatRoom() {
         }
         const convoId = currentConvo._id
         const updatedConvo = await addUserToConvo(contactId, convoId)
-        const fetchedConvos = await getConvos()
-        setConvos(fetchedConvos)
-        setCurrentConvo(updatedConvo)
+
+        refreshState(updatedConvo)
     }
 
     const deleteConvo = async (convoId) => {
         const deletedConvo = await removeConvo(convoId)
+        refreshState(deletedConvo)
     }
 
     return (

@@ -12,7 +12,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                     ? 'm-2 h-16 rounded-sm bg-slate-300 shadow-md'
                     : 'm-2 h-16 rounded-sm bg-slate-200 shadow-md'
             }
-            onClick={() => handleConvoSelect(convo)}
+            onClick={(e) => handleConvoSelect(e, convo)}
         >
             {convo.users.map((user, i) => (
                 <Fragment key={user.id}>

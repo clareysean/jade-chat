@@ -9,7 +9,8 @@ export default function ConvoWindow({
 }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
-    const handleConvoSelect = (convo) => {
+    const handleConvoSelect = (e, convo) => {
+        if (e.target.nodeName === 'BUTTON') return
         setCurrentConvo(convo)
     }
 
@@ -20,7 +21,7 @@ export default function ConvoWindow({
                 {convos
                     ? convos.map((convo) => (
                           <ConvoCard
-                              handleConvoSelect={handleConvoSelect} // Passing the convo object as an argument
+                              handleConvoSelect={handleConvoSelect}
                               deleteConvo={() => deleteConvo(convo._id)}
                               key={convo._id}
                               convo={convo}
