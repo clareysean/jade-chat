@@ -10,8 +10,8 @@ export default function ConvoCard({ convo, handleConvoSelect }) {
         <div
             className={
                 convo == currentConvo
-                    ? 'h-16 rounded-sm bg-slate-300'
-                    : 'h-16 rounded-sm bg-slate-200'
+                    ? 'm-2 h-16 rounded-sm bg-slate-300 shadow-md'
+                    : 'm-2 h-16 rounded-sm bg-slate-200 shadow-md'
             }
             onClick={() => handleConvoSelect(convo)}
         >
