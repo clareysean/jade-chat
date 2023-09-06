@@ -1,15 +1,6 @@
 import { React, useState, useEffect } from 'react'
 
-export default function ConvoWindow() {
-    const [conversations, setConversations] = useState([])
-
-    useEffect(() => {
-        async function fetchConversations() {
-            const fetchedConversations = await getConversations()
-            setConversations(fetchedConversations)
-        }
-    }, [])
-
+export default function ConvoWindow({ convos }) {
     return (
         <div className="bg-gray container h-full w-2/4 p-2 shadow-md">
             Convos
