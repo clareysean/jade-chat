@@ -26,7 +26,12 @@ async function getAllConvos(req, res) {
 }
 
 async function createConvo(req, res) {
-    console.log(`in the controller FOR NEW CONVO`)
-    console.log(req.user)
-    // const newConvo = Conversation.create({ users: [req.user] })
+    try {
+        const newConvo = await Conversation.create({ users: [req.user] })
+        await newConvo.populate(['users', { path: 'users' }])
+        res.json(newConvo)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 }
