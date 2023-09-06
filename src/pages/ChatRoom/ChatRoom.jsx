@@ -20,7 +20,7 @@ export default function ChatRoom() {
 
     return (
         <div className="container flex h-screen w-full gap-2">
-            <ConvoWindow />
+            <ConvoWindow convos={convos} />
             <ChatWindow />
             <ContactsWindow />
         </div>
