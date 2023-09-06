@@ -8,7 +8,7 @@ export default function ConvoCard({ convo, handleConvoSelect }) {
     return (
         <div
             className={
-                convo._id === currentConvo._id
+                convo._id === currentConvo?._id
                     ? 'm-2 h-16 rounded-sm bg-slate-300 shadow-md'
                     : 'm-2 h-16 rounded-sm bg-slate-200 shadow-md'
             }
@@ -22,6 +22,7 @@ export default function ConvoCard({ convo, handleConvoSelect }) {
                     <span>
                         {user.name}
                         {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
+                        {/* omit comma after last user name */}
                     </span>
                 </Fragment>
             ))}

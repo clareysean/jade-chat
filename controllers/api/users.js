@@ -1,4 +1,5 @@
 const User = require('../../models/user')
+const Conversation = require('../../models/conversation')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -7,6 +8,7 @@ module.exports = {
     login,
     checkToken,
     getActiveUsers,
+    addToConvo,
 }
 
 async function create(req, res) {
@@ -66,3 +68,23 @@ async function getActiveUsers(req, res) {
     const activeUsers = await User.find({ _id: { $ne: currentUserId } })
     return res.json(activeUsers)
 }
+
+async function addToConvo(req, res) {
+    try {
+        const userId = req.params.contactId
+        const convoId = req.params.convoId
+
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+            convoId,
+            { $addToSet: { users: userId } },
+            { new: true } // returns the updated conversation document
+        )
+        console.log(updatedConversation)
+        return res.json(updatedConversation)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+// gotta retrieve the current convo id and pass it

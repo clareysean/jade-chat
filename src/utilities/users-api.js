@@ -17,3 +17,7 @@ export function checkToken() {
 export function getActiveUsers() {
     return sendRequest(`${BASE_URL}/all`, 'GET')
 }
+
+export function addUserToConvo(contactId, convoId) {
+    return sendRequest(`${BASE_URL}/${contactId}/${convoId}`, 'PUT')
+}

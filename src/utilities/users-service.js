@@ -52,3 +52,8 @@ export async function checkToken() {
     const dateStr = await usersAPI.checkToken()
     return new Date(dateStr)
 }
+
+export async function addUserToConvo(contactId, convoId) {
+    const addedUser = await usersAPI.addUserToConvo(contactId, convoId)
+    return addedUser
+}
