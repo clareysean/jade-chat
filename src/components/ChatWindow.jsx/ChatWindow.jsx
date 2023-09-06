@@ -1,12 +1,19 @@
-import { React, useState, useContext } from 'react'
+import { React, useState, useContext, useEffect } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ChatWindow() {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
+    const [convoUsersLength, setConvoUsersLength] = useState(0)
 
-    const convoUsersLength = currentConvo.users.length
+    useEffect(() => {
+        if (currentConvo) {
+            setConvoUsersLength(currentConvo.users.length)
+        } else {
+            setConvoUsersLength(0)
+        }
+    }, [currentConvo])
 
     const handleSubmitMessage = () => {
         return
@@ -23,9 +30,10 @@ export default function ChatWindow() {
         setMessageText(e.target.value)
         setError('')
     }
+
     return (
         <div id="container" className="bg-emerald-100">
-            {currentConvo.users.map((user, i) => (
+            {currentConvo?.users.map((user, i) => (
                 <>
                     <span>
                         {user.name}

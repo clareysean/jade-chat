@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { createConvo } from '../../utilities/messaging-service'
 import ConvoCard from '../ConvoCard/ConvoCard'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
@@ -7,6 +8,11 @@ export default function ConvoWindow({ convos }) {
 
     const handleConvoSelect = (convo) => {
         setCurrentConvo(convo)
+    }
+
+    async function handleCreateConvo(e) {
+        e.preventDefault()
+        return await createConvo()
     }
 
     return (
@@ -23,7 +29,10 @@ export default function ConvoWindow({ convos }) {
                       ))
                     : ''}
             </div>
-            <button className="btn my-1 rounded bg-emerald-800 p-2 text-white">
+            <button
+                onClick={handleCreateConvo}
+                className="btn my-1 rounded bg-emerald-800 p-2 text-white"
+            >
                 New Conversation
             </button>
         </div>

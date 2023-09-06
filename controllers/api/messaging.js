@@ -3,6 +3,7 @@ const Conversation = require('../../models/conversation')
 module.exports = {
     create,
     getAllConvos,
+    createConvo,
 }
 
 async function create(req, res) {
@@ -22,4 +23,10 @@ async function getAllConvos(req, res) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })
     }
+}
+
+async function createConvo(req, res) {
+    console.log(`in the controller FOR NEW CONVO`)
+    console.log(req.user)
+    // const newConvo = Conversation.create({ users: [req.user] })
 }

@@ -9,7 +9,7 @@ export const ConvoContext = createContext([])
 
 export default function ChatRoom() {
     const [convos, setConvos] = useState(null)
-    const [currentConvo, setCurrentConvo] = useState({})
+    const [currentConvo, setCurrentConvo] = useState(null)
 
     useEffect(() => {
         async function fetchConvos() {
