@@ -5,15 +5,7 @@ export default function ChatWindow() {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
-    const [convoUsersLength, setConvoUsersLength] = useState(0)
-
-    useEffect(() => {
-        if (currentConvo) {
-            setConvoUsersLength(currentConvo.users.length)
-        } else {
-            setConvoUsersLength(0)
-        }
-    }, [currentConvo])
+    const convoUsersLength = currentConvo ? currentConvo.users.length : 0
 
     const handleSubmitMessage = () => {
         return

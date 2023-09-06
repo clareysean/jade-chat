@@ -33,6 +33,8 @@ export default function ChatRoom() {
         }
         const convoId = currentConvo._id
         const updatedConvo = await addUserToConvo(contactId, convoId)
+        const fetchedConvos = await getConvos()
+        setConvos(fetchedConvos)
         setCurrentConvo(updatedConvo)
     }
 

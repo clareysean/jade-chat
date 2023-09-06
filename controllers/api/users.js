@@ -79,6 +79,7 @@ async function addToConvo(req, res) {
             { $addToSet: { users: userId } },
             { new: true } // returns the updated conversation document
         )
+        await updatedConversation.populate(['users', { path: 'users' }])
         console.log(updatedConversation)
         return res.json(updatedConversation)
     } catch (error) {
