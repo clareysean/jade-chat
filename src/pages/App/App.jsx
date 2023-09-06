@@ -33,7 +33,7 @@ export default function App() {
     return (
         <ActiveUsersContext.Provider value={{ activeUsers, setActiveUsers }}>
             <UserContext.Provider value={{ user, setUser }}>
-                <main className="App h-screen w-full">
+                <main className="App h-4/5 w-full">
                     {user ? (
                         <>
                             <NavBar />

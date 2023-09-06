@@ -5,12 +5,12 @@ import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 export default function ConvoWindow({ convos }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
-    function handleConvoSelect(convo) {
+    const handleConvoSelect = (convo) => {
         setCurrentConvo(convo)
     }
 
     return (
-        <div className="bg-gray container h-full w-2/4 p-2 shadow-md">
+        <div className="container h-full w-1/4 bg-slate-300 p-2 shadow-md">
             Convos
             <div className="h-4/5 rounded-lg bg-emerald-200">
                 {convos
