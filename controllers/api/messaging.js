@@ -50,6 +50,7 @@ async function deleteConvo(req, res) {
         res.status(404).json({ error: 'Document not found' })
     }
 }
+
 async function addMessage(req, res) {
     try {
         const msg = req.body.message
@@ -60,7 +61,6 @@ async function addMessage(req, res) {
             user: req.user._id,
             conversation: convoId,
         }
-        console.log(messageData)
 
         const updatedConversation = await Conversation.findByIdAndUpdate(
             convoId,

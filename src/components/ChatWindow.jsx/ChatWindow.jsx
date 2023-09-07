@@ -1,5 +1,6 @@
 import { React, useState, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import MessageCard from '../MessageCard/MessageCard'
 
 export default function ChatWindow({ handleSendMessage }) {
     const [messageText, setMessageText] = useState('')
@@ -8,14 +9,10 @@ export default function ChatWindow({ handleSendMessage }) {
     const convoUsersLength = currentConvo ? currentConvo.users.length : 0
 
     const handleSubmitMessage = (e) => {
+        e.preventDefault()
         if (currentConvo === null || currentConvo === undefined) {
-            e.preventDefault()
             return setError('No current conversation')
         }
-        e.preventDefault()
-        console.log(
-            `in the chat window handler${currentConvo._id} ${messageText}`
-        )
         handleSendMessage(currentConvo._id, messageText)
     }
 
@@ -41,10 +38,11 @@ export default function ChatWindow({ handleSendMessage }) {
                     </span>
                 </Fragment>
             ))}
-            <div
-                id="chat-window"
-                className="w-md h-4/5 bg-slate-200 shadow-md"
-            ></div>
+            <div id="chat-window" className="w-md h-4/5 bg-slate-200 shadow-md">
+                {currentConvo?.messages.map((message) => (
+                    <MessageCard key={message._id} message={message} />
+                ))}
+            </div>
             <div>
                 <div className="flex h-fit items-baseline bg-slate-300">
                     <form
