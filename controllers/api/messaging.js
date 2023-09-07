@@ -1,4 +1,5 @@
 const { Message, Conversation } = require('../../models/conversation')
+const mongoose = require('mongoose')
 
 module.exports = {
     create,
@@ -18,7 +19,7 @@ async function getAllConvos(req, res) {
     try {
         const userConvos = await Conversation.find({
             users: { $in: [currentUserId] },
-        }).populate('users') // this will populate the 'users' field with user documents
+        }).populate('users') // populate the 'users' field with user documents
 
         res.json(userConvos)
     } catch (error) {
@@ -41,7 +42,13 @@ async function createConvo(req, res) {
 async function deleteConvo(req, res) {
     try {
         const convoId = req.params.id
-        const deletedConvo = await Conversation.findByIdAndDelete(convoId)
+        const convoToDelete = await Conversation.findById(convoId)
+
+        for (const message of convoToDelete.messages) {
+            const messageId = mongoose.Types.ObjectId(message._id) // Cast to ObjectId
+            await Message.findByIdAndDelete(messageId)
+        }
+        const deletedConvo = await convoToDelete.delete()
         res.json(deletedConvo)
     } catch (error) {
         console.error('Error:', error)
@@ -59,7 +66,6 @@ async function addMessage(req, res) {
         if (!conversation) {
             return res.status(404).json({ error: 'Conversation not found' })
         }
-
         const message = await Message.create({
             text: req.body.message,
             user: req.user._id,
@@ -69,9 +75,7 @@ async function addMessage(req, res) {
         })
 
         conversation.messages.push(message)
-
         await conversation.save()
-
         return res.json(conversation)
     } catch (error) {
         console.error('Error:', error)

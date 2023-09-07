@@ -14,8 +14,6 @@ export function removeConvo(convoId) {
 }
 
 export function sendMsg(convoId, msgText) {
-    console.log(msgText)
-    console.log(`in the api`)
     const data = { message: msgText }
     return sendRequest(`${BASE_URL}/${convoId}`, 'PUT', data)
 }

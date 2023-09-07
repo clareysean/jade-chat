@@ -9,6 +9,7 @@ module.exports = {
     checkToken,
     getActiveUsers,
     addToConvo,
+    removeFromConvo,
 }
 
 async function create(req, res) {
@@ -86,4 +87,10 @@ async function addToConvo(req, res) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })
     }
+}
+
+async function removeFromConvo(req, res) {
+    console.log(`in the controller remove from convo`)
+    const convoId = req.params.convoId
+    const userId = req.params.contactId
 }

@@ -1,12 +1,18 @@
 import React, { useContext } from 'react'
 import { ActiveUsersContext, UserContext } from '../../pages/App/App'
 import ContactCard from '../ContactCard/ContactCard'
+import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
-export default function ContactsWindow({ addToConvo }) {
+export default function ContactsWindow({ addToConvo, removeFromConvo }) {
     const { activeUsers, setActiveUsers } = useContext(ActiveUsersContext)
+    const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
     const handleAddToConvo = (contactId) => {
         addToConvo(contactId)
+    }
+
+    const handleRemoveFromConvo = (contactId) => {
+        removeFromConvo(contactId)
     }
 
     return (
@@ -14,9 +20,13 @@ export default function ContactsWindow({ addToConvo }) {
             <h1>Contacts</h1>
             {activeUsers.map((user) => (
                 <ContactCard
+                    convo={currentConvo}
                     handleAddToConvo={() => handleAddToConvo(user._id)}
+                    handleRemoveFromConvo={() =>
+                        handleRemoveFromConvo(user._id)
+                    }
                     key={user._id}
-                    name={user.name}
+                    user={user}
                     {...(user.profilePictureUrl && {
                         profilePictureUrl: user.profilePictureUrl,
                     })}

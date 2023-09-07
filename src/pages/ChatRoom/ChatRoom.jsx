@@ -1,5 +1,6 @@
 import { React, useEffect, useState, useContext, createContext } from 'react'
 import { addUserToConvo } from '../../utilities/users-service'
+import { removeUserFromConvo } from '../../utilities/users-api'
 import {
     getConvos,
     createConvo,
@@ -46,6 +47,11 @@ export default function ChatRoom() {
         refreshState(updatedConvo)
     }
 
+    const removeFromConvo = async (contactId) => {
+        const convoId = currentConvo._id
+        await removeUserFromConvo(contactId, convoId)
+    }
+
     const deleteConvo = async (convoId) => {
         await removeConvo(convoId)
         refreshState(null)
@@ -64,6 +70,7 @@ export default function ChatRoom() {
                     convos={convos}
                     handleCreateConvo={handleCreateConvo}
                     deleteConvo={deleteConvo}
+                    removeFromConvo={removeFromConvo}
                 />
                 <ChatWindow handleSendMessage={sendMessage} />
                 <ContactsWindow addToConvo={addToConvo} />

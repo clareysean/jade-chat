@@ -21,3 +21,7 @@ export function getActiveUsers() {
 export function addUserToConvo(contactId, convoId) {
     return sendRequest(`${BASE_URL}/${contactId}/${convoId}`, 'PUT')
 }
+
+export function removeUserFromConvo(contactId, convoId) {
+    return sendRequest(`${BASE_URL}/${convoId}/${contactId}`, 'DELETE')
+}
