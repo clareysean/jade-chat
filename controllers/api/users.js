@@ -1,5 +1,5 @@
 const User = require('../../models/user')
-const Conversation = require('../../models/conversation')
+const { Conversation } = require('../../models/conversation')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 

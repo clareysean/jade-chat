@@ -1,4 +1,4 @@
-const Conversation = require('../../models/conversation')
+const { Message, Conversation } = require('../../models/conversation')
 
 module.exports = {
     create,
@@ -51,14 +51,7 @@ async function deleteConvo(req, res) {
 
 async function addMessage(req, res) {
     try {
-        const msg = req.body.message
         const convoId = req.params.id
-
-        const messageData = {
-            text: msg,
-            user: req.user._id,
-            conversation: convoId,
-        }
 
         const conversation = await Conversation.findById(convoId)
 
@@ -66,7 +59,17 @@ async function addMessage(req, res) {
             return res.status(404).json({ error: 'Conversation not found' })
         }
 
-        await conversation.addMessageWithUser(messageData)
+        const message = await Message.create({
+            text: req.body.message,
+            user: req.user._id,
+            userName: req.user.name,
+            pictureUrl: req.user.profilePictureUrl,
+            conversation: convoId,
+        })
+
+        conversation.messages.push(message)
+
+        await conversation.save()
 
         return res.json(conversation)
     } catch (error) {
@@ -74,3 +77,5 @@ async function addMessage(req, res) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
+
+async function getAllMessages(req, res) {}

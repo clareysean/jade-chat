@@ -9,6 +9,8 @@ const messageSchema = new Schema(
     {
         text: { type: String, required: true },
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        userName: { type: String, required: true },
+        pictureUrl: { type: String },
         conversation: {
             type: Schema.Types.ObjectId,
             required: true,
@@ -19,11 +21,11 @@ const messageSchema = new Schema(
     { timestamps: true }
 )
 
-messageSchema.statics.setSeen = function (messageId) {
-    return this.findByIdAndUpdate(messageId, { seen: true })
+messageSchema.methods.setSeen = async function (messageId) {
+    return await this.findByIdAndUpdate(messageId, { seen: true })
 }
 
-//maybe make the query lean above
+const Message = mongoose.model('Message', messageSchema)
 
 const conversationSchema = new Schema(
     {
@@ -35,15 +37,9 @@ const conversationSchema = new Schema(
     }
 )
 
-conversationSchema.methods.addMessageWithUser = async function (messageData) {
-    const Message = mongoose.model('Message', messageSchema)
-    // Create a new message instance using the Message model
-    const message = new Message(messageData)
-    await message.populate('user')
+const Conversation = mongoose.model('Conversation', conversationSchema)
 
-    this.messages.push(message)
-    await this.save()
-    return message
+module.exports = {
+    Conversation,
+    Message,
 }
-
-module.exports = mongoose.model('Conversation', conversationSchema)
