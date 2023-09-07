@@ -41,9 +41,7 @@ async function createConvo(req, res) {
 async function deleteConvo(req, res) {
     try {
         const convoId = req.params.id
-        console.log(convoId)
         const deletedConvo = await Conversation.findByIdAndDelete(convoId)
-        console.log(deletedConvo)
         res.json(deletedConvo)
     } catch (error) {
         console.error('Error:', error)
@@ -62,13 +60,15 @@ async function addMessage(req, res) {
             conversation: convoId,
         }
 
-        const updatedConversation = await Conversation.findByIdAndUpdate(
-            convoId,
-            { $push: { messages: messageData } },
-            { new: true }
-        )
+        const conversation = await Conversation.findById(convoId)
 
-        return res.json(updatedConversation)
+        if (!conversation) {
+            return res.status(404).json({ error: 'Conversation not found' })
+        }
+
+        await conversation.addMessageWithUser(messageData)
+
+        return res.json(conversation)
     } catch (error) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })

@@ -19,7 +19,7 @@ const messageSchema = new Schema(
     { timestamps: true }
 )
 
-messageSchema.statics.setSeen = (messageId) => {
+messageSchema.statics.setSeen = function (messageId) {
     return this.findByIdAndUpdate(messageId, { seen: true })
 }
 
@@ -34,5 +34,16 @@ const conversationSchema = new Schema(
         timestamps: true,
     }
 )
+
+conversationSchema.methods.addMessageWithUser = async function (messageData) {
+    const Message = mongoose.model('Message', messageSchema)
+    // Create a new message instance using the Message model
+    const message = new Message(messageData)
+    await message.populate('user')
+
+    this.messages.push(message)
+    await this.save()
+    return message
+}
 
 module.exports = mongoose.model('Conversation', conversationSchema)

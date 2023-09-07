@@ -6,7 +6,7 @@ export default function ChatWindow({ handleSendMessage }) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
-    const convoUsersLength = currentConvo ? currentConvo.users.length : 0
+    const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
 
     const handleSubmitMessage = (e) => {
         e.preventDefault()
