@@ -90,7 +90,24 @@ async function addToConvo(req, res) {
 }
 
 async function removeFromConvo(req, res) {
-    console.log(`in the controller remove from convo`)
-    const convoId = req.params.convoId
-    const userId = req.params.contactId
+    try {
+        const userId = req.params.contactId
+        const convoId = req.params.convoId
+
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+            convoId,
+            { $pull: { users: userId } }, // $pull removes the user object id from the users array
+            { new: true }
+        ).populate('users')
+
+        if (!updatedConversation) {
+            return res.status(404).json({ error: 'Conversation not found' })
+        }
+
+        console.log(updatedConversation)
+        return res.json(updatedConversation)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 }

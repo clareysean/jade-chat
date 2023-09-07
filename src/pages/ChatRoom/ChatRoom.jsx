@@ -49,7 +49,8 @@ export default function ChatRoom() {
 
     const removeFromConvo = async (contactId) => {
         const convoId = currentConvo._id
-        await removeUserFromConvo(contactId, convoId)
+        const updatedConvo = await removeUserFromConvo(contactId, convoId)
+        refreshState(updatedConvo)
     }
 
     const deleteConvo = async (convoId) => {
@@ -73,7 +74,10 @@ export default function ChatRoom() {
                     removeFromConvo={removeFromConvo}
                 />
                 <ChatWindow handleSendMessage={sendMessage} />
-                <ContactsWindow addToConvo={addToConvo} />
+                <ContactsWindow
+                    addToConvo={addToConvo}
+                    removeFromConvo={removeFromConvo}
+                />
             </ConvoContext.Provider>
         </div>
     )
