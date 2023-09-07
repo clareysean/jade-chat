@@ -54,11 +54,17 @@ async function addMessage(req, res) {
     try {
         const msg = req.body.message
         const convoId = req.params.id
-        console.log(convoId)
-        console.log(msg)
+
+        const messageData = {
+            text: msg,
+            user: req.user._id,
+            conversation: convoId,
+        }
+        console.log(messageData)
+
         const updatedConversation = await Conversation.findByIdAndUpdate(
             convoId,
-            { $push: { messages: msg } }, // Add our new message to the messages array
+            { $push: { messages: messageData } },
             { new: true }
         )
 
@@ -68,19 +74,3 @@ async function addMessage(req, res) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
-
-//todo make sure the message doc is properly contructed before pushing it into conversation
-
-// const messageSchema = new Schema(
-//     {
-//         text: { type: String, required: true },
-//         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-//         conversation: {
-//             type: Schema.Types.ObjectId,
-//             required: true,
-//         },
-//         seen: { type: Boolean, default: false },
-//         attachments: [attachmentSchema],
-//     },
-//     { timestamps: true }
-// )
