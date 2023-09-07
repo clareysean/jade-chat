@@ -10,6 +10,12 @@ export function createConvo() {
 }
 
 export function removeConvo(convoId) {
-    console.log(convoId)
     return sendRequest(`${BASE_URL}/${convoId}`, 'DELETE')
+}
+
+export function sendMsg(convoId, msgText) {
+    console.log(msgText)
+    console.log(`in the api`)
+    const data = { message: msgText }
+    return sendRequest(`${BASE_URL}/${convoId}`, 'PUT', data)
 }

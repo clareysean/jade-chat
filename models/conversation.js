@@ -11,7 +11,6 @@ const messageSchema = new Schema(
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         conversation: {
             type: Schema.Types.ObjectId,
-            ref: 'Conversation',
             required: true,
         },
         seen: { type: Boolean, default: false },

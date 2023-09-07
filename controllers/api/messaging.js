@@ -5,6 +5,7 @@ module.exports = {
     getAllConvos,
     createConvo,
     delete: deleteConvo,
+    addMessage,
 }
 
 async function create(req, res) {
@@ -49,3 +50,37 @@ async function deleteConvo(req, res) {
         res.status(404).json({ error: 'Document not found' })
     }
 }
+async function addMessage(req, res) {
+    try {
+        const msg = req.body.message
+        const convoId = req.params.id
+        console.log(convoId)
+        console.log(msg)
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+            convoId,
+            { $push: { messages: msg } }, // Add our new message to the messages array
+            { new: true }
+        )
+
+        return res.json(updatedConversation)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+//todo make sure the message doc is properly contructed before pushing it into conversation
+
+// const messageSchema = new Schema(
+//     {
+//         text: { type: String, required: true },
+//         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+//         conversation: {
+//             type: Schema.Types.ObjectId,
+//             required: true,
+//         },
+//         seen: { type: Boolean, default: false },
+//         attachments: [attachmentSchema],
+//     },
+//     { timestamps: true }
+// )

@@ -4,7 +4,8 @@ import {
     getConvos,
     createConvo,
     removeConvo,
-} from '../../utilities/messaging-service'
+    sendMsg,
+} from '../../utilities/messaging-api'
 import ConvoWindow from '../../components/ConvoWindow/ConvoWindow'
 import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
@@ -46,8 +47,14 @@ export default function ChatRoom() {
     }
 
     const deleteConvo = async (convoId) => {
-        const deletedConvo = await removeConvo(convoId)
-        refreshState(deletedConvo)
+        await removeConvo(convoId)
+        refreshState(null)
+    }
+
+    const sendMessage = async (convoId, msgText) => {
+        const updatedConvo = await sendMsg(convoId, msgText)
+        console.log(updatedConvo)
+        refreshState(updatedConvo)
     }
 
     return (
@@ -58,7 +65,7 @@ export default function ChatRoom() {
                     handleCreateConvo={handleCreateConvo}
                     deleteConvo={deleteConvo}
                 />
-                <ChatWindow />
+                <ChatWindow handleSendMessage={sendMessage} />
                 <ContactsWindow addToConvo={addToConvo} />
             </ConvoContext.Provider>
         </div>

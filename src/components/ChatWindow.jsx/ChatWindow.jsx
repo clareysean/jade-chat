@@ -1,14 +1,22 @@
 import { React, useState, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
-export default function ChatWindow() {
+export default function ChatWindow({ handleSendMessage }) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
     const convoUsersLength = currentConvo ? currentConvo.users.length : 0
 
-    const handleSubmitMessage = () => {
-        return
+    const handleSubmitMessage = (e) => {
+        if (currentConvo === null || currentConvo === undefined) {
+            e.preventDefault()
+            return setError('No current conversation')
+        }
+        e.preventDefault()
+        console.log(
+            `in the chat window handler${currentConvo._id} ${messageText}`
+        )
+        handleSendMessage(currentConvo._id, messageText)
     }
 
     const submitOnEnter = (e) => {

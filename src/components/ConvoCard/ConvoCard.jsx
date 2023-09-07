@@ -27,7 +27,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                 </Fragment>
             ))}
             <button
-                className="btn my-1 rounded bg-emerald-800 p-2 text-xs text-white"
+                className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
                 onClick={deleteConvo}
             >
                 Delete Conversation
