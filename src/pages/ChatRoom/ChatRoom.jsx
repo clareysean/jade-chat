@@ -54,7 +54,7 @@ export default function ChatRoom() {
     const sendMessage = async (convoId, msgText) => {
         const updatedConvo = await sendMsg(convoId, msgText)
         console.log(updatedConvo)
-        refreshState(updatedConvo)
+        setCurrentConvo(updatedConvo)
     }
 
     return (

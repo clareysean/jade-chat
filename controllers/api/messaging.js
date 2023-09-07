@@ -53,7 +53,8 @@ async function addMessage(req, res) {
     try {
         const convoId = req.params.id
 
-        const conversation = await Conversation.findById(convoId)
+        const conversation =
+            await Conversation.findById(convoId).populate('users')
 
         if (!conversation) {
             return res.status(404).json({ error: 'Conversation not found' })
