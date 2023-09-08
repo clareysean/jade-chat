@@ -80,7 +80,7 @@ export default function ChatWindow({ handleSendMessage, deleteMessage }) {
                             required
                         />
                         <button
-                            disabled={currentConvo.dummy === true}
+                            disabled={currentConvo?.dummy === true}
                             className="btn rounded bg-emerald-800 p-2 text-white"
                             type="submit"
                         >

@@ -8,11 +8,11 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
 
-    const handleAddToConvo = (contactId) => {
+    const handleAddToConvo = (contactId, pictureUrl, name) => {
         if (currentConvo === null || currentConvo === undefined) {
             return setError('No current conversation')
         }
-        addToConvo(contactId)
+        addToConvo(contactId, pictureUrl, name)
     }
 
     const handleRemoveFromConvo = (contactId) => {
@@ -21,16 +21,21 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
 
     return (
         <div className="container h-full w-1/4 bg-slate-200 shadow-md">
-            <h1>Contacts</h1>
+            <h1>Users</h1>
             {activeUsers.map((user) => (
                 <ContactCard
-                    convo={currentConvo}
-                    handleAddToConvo={() => handleAddToConvo(user._id)}
+                    handleAddToConvo={() =>
+                        handleAddToConvo(
+                            user._id,
+                            user.profilePictureUrl,
+                            user.name
+                        )
+                    }
                     handleRemoveFromConvo={() =>
                         handleRemoveFromConvo(user._id)
                     }
                     key={user._id}
-                    user={user}
+                    contact={user}
                     {...(user.profilePictureUrl && {
                         profilePictureUrl: user.profilePictureUrl,
                     })}

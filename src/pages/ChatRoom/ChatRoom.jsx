@@ -29,6 +29,14 @@ export default function ChatRoom() {
         fetchConvos()
     }, [])
 
+    function checkIfCurrentExists() {
+        if (currentConvo === null || currentConvo === undefined) {
+            setError('No current conversation')
+            return false
+        }
+        return true
+    }
+
     const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos() //this request was slow //
         setConvos(fetchedConvos)
@@ -47,26 +55,76 @@ export default function ChatRoom() {
         refreshState(updatedConvo)
     } // create dummy convo with current user name stored in user context {users:[{_id:user._id name:user.name}]}
 
-    const addToConvo = async (contactId) => {
-        if (currentConvo === null || currentConvo === undefined) {
-            return setError('No current conversation')
-        }
-        const convoId = currentConvo._id
-        const updatedConvo = await addUserToConvo(contactId, convoId)
+    const addToConvo = async (contactId, pictureUrl, name) => {
+        const currentExists = checkIfCurrentExists()
+        if (currentExists) {
+            const dummyConvo = { ...currentConvo }
+            dummyConvo.dummy = true
+            // this boolean value disables send msg button and delete msg button
+            const userToAdd = {
+                _id: contactId,
+                name: name,
+                profilePictureUrl: pictureUrl,
+            }
+            // push dummy user object to dummy currentConvo users array
+            dummyConvo.users.push(userToAdd)
 
-        refreshState(updatedConvo)
+            const updatedConvos = [...convos]
+
+            const index = updatedConvos.findIndex(
+                (convo) => convo._id === currentConvo._id
+            )
+
+            if (index !== -1) {
+                updatedConvos[index] = dummyConvo
+                setCurrentConvo(dummyConvo)
+                setConvos(updatedConvos)
+            }
+
+            // update state then...
+            //call backend and update convo doc
+            const convoId = currentConvo._id
+            const updatedConvo = await addUserToConvo(contactId, convoId)
+            refreshState(updatedConvo)
+        }
+        return
     }
 
     const removeFromConvo = async (contactId) => {
-        const convoId = currentConvo._id
-        const updatedConvo = await removeUserFromConvo(contactId, convoId)
-        refreshState(updatedConvo)
+        const currentExists = checkIfCurrentExists()
+        if (currentExists) {
+            const dummyConvo = { ...currentConvo }
+            dummyConvo.dummy = true
+            dummyConvo.users = dummyConvo.users.filter(
+                (user) => user._id !== contactId
+            )
+
+            const updatedConvos = [...convos]
+
+            const index = updatedConvos.findIndex(
+                (convo) => convo._id === currentConvo._id
+            )
+
+            if (index !== -1) {
+                updatedConvos[index] = dummyConvo
+                setCurrentConvo(dummyConvo)
+                setConvos(updatedConvos)
+            }
+
+            // Then remove on the database
+            const convoId = currentConvo._id
+            const updatedConvo = await removeUserFromConvo(contactId, convoId)
+            refreshState(updatedConvo)
+        }
     }
 
     const deleteConvo = async (convoId) => {
         // dummy convos is convos filtered by convoId, set then call refresh OR ...just set convos to filtered and current to null
-        await removeConvo(convoId)
-        refreshState(null)
+        const updatedConvos = convos.filter((convo) => convo._id !== convoId)
+        setConvos(updatedConvos)
+        setCurrentConvo(null)
+        removeConvo(convoId)
+        // refreshState(null)
     }
 
     const deleteMessage = async (msgId) => {

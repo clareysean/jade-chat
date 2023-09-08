@@ -26,18 +26,14 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                     </span>
                 </Fragment>
             ))}
-            {convo._id ? (
-                <button
-                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
-                    onClick={deleteConvo}
-                >
-                    Delete Conversation
-                </button>
-            ) : (
-                <button className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white">
-                    Delete Conversation
-                </button>
-            )}
+
+            <button
+                disabled={convo?.dummy === true}
+                className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                onClick={deleteConvo}
+            >
+                Delete Conversation
+            </button>
         </div>
     )
 }

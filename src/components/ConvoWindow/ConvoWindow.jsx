@@ -30,6 +30,7 @@ export default function ConvoWindow({
                     : ''}
             </div>
             <button
+                disabled={currentConvo?.dummy === true}
                 onClick={() => handleCreateConvo()}
                 className="btn my-1 rounded bg-emerald-800 p-2 text-white"
             >
