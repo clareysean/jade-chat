@@ -3,7 +3,7 @@ import { signUp } from '../../utilities/users-service'
 import { useState, useContext } from 'react'
 
 export default function SignUpForm() {
-    const { user, setUser } = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext)
     const [formData, setFormData] = useState({
         name: '',
         email: '',

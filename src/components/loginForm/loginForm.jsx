@@ -3,7 +3,7 @@ import { UserContext } from '../../pages/App/App'
 import * as usersService from '../../utilities/users-service'
 
 export default function LoginForm() {
-    const { user, setUser } = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext)
     const [credentials, setCredentials] = useState({
         email: '',
         password: '',

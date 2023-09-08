@@ -2,15 +2,11 @@ const { Message, Conversation } = require('../../models/conversation')
 const mongoose = require('mongoose')
 
 module.exports = {
-    create,
     getAllConvos,
     createConvo,
     delete: deleteConvo,
     addMessage,
-}
-
-async function create(req, res) {
-    console.log(`bungus`)
+    deleteMsg,
 }
 
 async function getAllConvos(req, res) {
@@ -19,7 +15,7 @@ async function getAllConvos(req, res) {
     try {
         const userConvos = await Conversation.find({
             users: { $in: [currentUserId] },
-        }).populate('users') // populate the 'users' field with user documents
+        }).lean().populate('users') // populate the 'users' field with user documents
 
         res.json(userConvos)
     } catch (error) {
@@ -41,7 +37,8 @@ async function createConvo(req, res) {
 
 async function deleteConvo(req, res) {
     try {
-        const convoId = req.params.id
+        const convoId = req.params.convoId
+        console.log(`${convoId} inj the controller`)
         const convoToDelete = await Conversation.findById(convoId)
 
         for (const message of convoToDelete.messages) {
@@ -58,8 +55,7 @@ async function deleteConvo(req, res) {
 
 async function addMessage(req, res) {
     try {
-        const convoId = req.params.id
-
+        const convoId = req.params.convoId
         const conversation =
             await Conversation.findById(convoId).populate('users')
 
@@ -83,4 +79,26 @@ async function addMessage(req, res) {
     }
 }
 
-async function getAllMessages(req, res) {}
+async function deleteMsg(req, res) {
+    const convoId = req.params.convoId
+    const msgId = req.params.msgId
+
+    try {
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+            convoId,
+            { $pull: { messages: { _id: msgId } } },
+            { new: true }
+        ).populate('users')
+
+        await Message.findByIdAndDelete(msgId)
+
+        if (!updatedConversation) {
+            return res.status(404).json({ error: 'Conversation not found' })
+        }
+
+        res.json(updatedConversation)
+    } catch (error) {
+        console.error('Error:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+}

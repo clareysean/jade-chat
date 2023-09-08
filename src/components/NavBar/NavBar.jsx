@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { UserContext } from '../../pages/App/App'
 
 export default function NavBar() {
-    const { user, setUser } = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext)
     function handleLogOut() {
         // Delegate to the users-service
         userService.logOut()

@@ -1,13 +1,17 @@
-import React, { useContext } from 'react'
-import { ActiveUsersContext, UserContext } from '../../pages/App/App'
+import React, { useContext, useState } from 'react'
+import { ActiveUsersContext } from '../../pages/App/App'
 import ContactCard from '../ContactCard/ContactCard'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ContactsWindow({ addToConvo, removeFromConvo }) {
-    const { activeUsers, setActiveUsers } = useContext(ActiveUsersContext)
+    const [activeUsers, setActiveUsers] = useContext(ActiveUsersContext)
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [error, setError] = useState('')
 
     const handleAddToConvo = (contactId) => {
+        if (currentConvo === null || currentConvo === undefined) {
+            return setError('No current conversation')
+        }
         addToConvo(contactId)
     }
 
@@ -32,6 +36,7 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
                     })}
                 />
             ))}
+            <p className="error-message">&nbsp;{error}</p>
         </div>
     )
 }

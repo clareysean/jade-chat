@@ -15,7 +15,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             onClick={(e) => handleConvoSelect(e, convo)}
         >
             {convo.users.map((user, i) => (
-                <Fragment key={user.id}>
+                <Fragment key={user._id}>
                     {user.profilePictureUrl && (
                         <img src={user.profilePictureUrl} alt={user.name} />
                     )}
@@ -26,12 +26,18 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                     </span>
                 </Fragment>
             ))}
-            <button
-                className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
-                onClick={deleteConvo}
-            >
-                Delete Conversation
-            </button>
+            {convo._id ? (
+                <button
+                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                    onClick={deleteConvo}
+                >
+                    Delete Conversation
+                </button>
+            ) : (
+                <button className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white">
+                    Delete Conversation
+                </button>
+            )}
         </div>
     )
 }

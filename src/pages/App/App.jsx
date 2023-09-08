@@ -31,8 +31,8 @@ export default function App() {
     }, [user])
 
     return (
-        <ActiveUsersContext.Provider value={{ activeUsers, setActiveUsers }}>
-            <UserContext.Provider value={{ user, setUser }}>
+        <ActiveUsersContext.Provider value={[activeUsers, setActiveUsers]}>
+            <UserContext.Provider value={[user, setUser]}>
                 <main className="App h-4/5 w-full">
                     {user ? (
                         <>

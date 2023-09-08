@@ -2,10 +2,11 @@ import { React, useState, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import MessageCard from '../MessageCard/MessageCard'
 
-export default function ChatWindow({ handleSendMessage }) {
+export default function ChatWindow({ handleSendMessage, deleteMessage }) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
+    console.log(currentConvo)
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
 
     const handleSubmitMessage = (e) => {
@@ -14,6 +15,7 @@ export default function ChatWindow({ handleSendMessage }) {
             return setError('No current conversation')
         }
         handleSendMessage(currentConvo._id, messageText)
+        setMessageText('')
     }
 
     const submitOnEnter = (e) => {
@@ -28,19 +30,34 @@ export default function ChatWindow({ handleSendMessage }) {
         setError('')
     }
 
+    const handleDeleteMessage = (msgId) => {
+        deleteMessage(msgId)
+    }
+
     return (
         <div id="container" className="bg-emerald-100">
-            {currentConvo?.users.map((user, i) => (
-                <Fragment key={user._id}>
-                    <span>
-                        {user.name}
-                        {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
-                    </span>
-                </Fragment>
-            ))}
+            {currentConvo?.users.map(
+                (
+                    user,
+                    i // display the names of the users in the currentConvo
+                ) => (
+                    <Fragment key={user._id}>
+                        <span>
+                            {user.name}
+                            {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
+                        </span>
+                    </Fragment>
+                )
+            )}
             <div id="chat-window" className="w-md h-4/5 bg-slate-200 shadow-md">
                 {currentConvo?.messages.map((message) => (
-                    <MessageCard key={message._id} message={message} />
+                    <MessageCard
+                        key={message._id}
+                        message={message}
+                        handleDeleteMessage={() =>
+                            handleDeleteMessage(message._id)
+                        }
+                    />
                 ))}
             </div>
             <div>

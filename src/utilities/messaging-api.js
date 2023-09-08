@@ -17,3 +17,6 @@ export function sendMsg(convoId, msgText) {
     const data = { message: msgText }
     return sendRequest(`${BASE_URL}/${convoId}`, 'PUT', data)
 }
+export function deleteMsg(convoId, msgId) {
+    return sendRequest(`${BASE_URL}/${convoId}/${msgId}`, 'DELETE')
+}
