@@ -38,10 +38,10 @@ export default function ChatRoom() {
     }
 
     const refreshState = async (updatedCurrent) => {
-        const fetchedConvos = await getConvos() //this request was slow //
+        const fetchedConvos = await getConvos() //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
         setConvos(fetchedConvos)
         setCurrentConvo(updatedCurrent)
-    } // try not to refetch entire convo on send msg
+    }
 
     const handleCreateConvo = async () => {
         const newDummyConvo = {
@@ -128,15 +128,34 @@ export default function ChatRoom() {
     }
 
     const deleteMessage = async (msgId) => {
+        const dummyConvo = { ...currentConvo }
+        dummyConvo.dummy = true
+
+        dummyConvo.messages = dummyConvo.messages.filter(
+            (message) => message._id !== msgId
+        )
+        //
+        const updatedConvos = [...convos]
+
+        const index = updatedConvos.findIndex(
+            (convo) => convo._id === currentConvo._id
+        )
+
+        if (index !== -1) {
+            updatedConvos[index] = dummyConvo
+            setCurrentConvo(dummyConvo)
+            setConvos(updatedConvos)
+        }
+        //
+
         const convoId = currentConvo._id
         const updatedConvo = await deleteMsg(convoId, msgId)
         refreshState(updatedConvo)
     }
 
     const sendMessage = async (convoId, msgText) => {
-        //take the new message and push it into the currentConvo, then
-
         const dummyConvo = { ...currentConvo }
+        dummyConvo.dummy = true
         const dummyMsg = {
             user: user._id,
             text: msgText,
@@ -144,8 +163,19 @@ export default function ChatRoom() {
             profilePictureUrl: user.profilePictureUrl,
         }
         dummyConvo.messages.push(dummyMsg)
+        //
+        const updatedConvos = [...convos]
 
-        setCurrentConvo(dummyConvo)
+        const index = updatedConvos.findIndex(
+            (convo) => convo._id === currentConvo._id
+        )
+
+        if (index !== -1) {
+            updatedConvos[index] = dummyConvo
+            setCurrentConvo(dummyConvo)
+            setConvos(updatedConvos)
+        }
+        //
         const updatedconvo = await sendMsg(convoId, msgText)
         refreshState(updatedconvo)
     } // you can add message to state object before hitting backend...
