@@ -31,6 +31,7 @@ const conversationSchema = new Schema(
     {
         users: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
         messages: [messageSchema],
+        createdByUser: { type: Schema.Types.ObjectId, required: true },
     },
     {
         timestamps: true,

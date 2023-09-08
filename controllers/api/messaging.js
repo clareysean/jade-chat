@@ -15,7 +15,9 @@ async function getAllConvos(req, res) {
     try {
         const userConvos = await Conversation.find({
             users: { $in: [currentUserId] },
-        }).lean().populate('users') // populate the 'users' field with user documents
+        })
+            .lean()
+            .populate('users') // populate the 'users' field with user documents
 
         res.json(userConvos)
     } catch (error) {
@@ -26,7 +28,10 @@ async function getAllConvos(req, res) {
 
 async function createConvo(req, res) {
     try {
-        const newConvo = await Conversation.create({ users: [req.user] })
+        const newConvo = await Conversation.create({
+            users: [req.user],
+            createdByUser: req.user._id,
+        })
         await newConvo.populate(['users', { path: 'users' }])
         res.json(newConvo)
     } catch (error) {

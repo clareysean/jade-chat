@@ -1,8 +1,10 @@
 import React, { useEffect, useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { UserContext } from '../../pages/App/App'
 
 export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [user, setUser] = useContext(UserContext)
     const convoUsersLength = convo.users.length
 
     return (
@@ -26,14 +28,15 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                     </span>
                 </Fragment>
             ))}
-
-            <button
-                disabled={convo?.dummy === true}
-                className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
-                onClick={deleteConvo}
-            >
-                Delete Conversation
-            </button>
+            {user._id === convo.createdByUser ? (
+                <button
+                    disabled={convo?.dummy === true}
+                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                    onClick={deleteConvo}
+                >
+                    Delete Conversation
+                </button>
+            ) : null}
         </div>
     )
 }
