@@ -6,7 +6,7 @@ export default function ChatWindow({ handleSendMessage, deleteMessage }) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [error, setError] = useState('')
-    console.log(currentConvo)
+
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
 
     const handleSubmitMessage = (e) => {
@@ -80,10 +80,11 @@ export default function ChatWindow({ handleSendMessage, deleteMessage }) {
                             required
                         />
                         <button
+                            disabled={currentConvo.dummy === true}
                             className="btn rounded bg-emerald-800 p-2 text-white"
                             type="submit"
                         >
-                            Send Message
+                            Send
                         </button>
                     </form>
                 </div>

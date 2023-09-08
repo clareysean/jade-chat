@@ -39,8 +39,10 @@ export default function ChatRoom() {
         const newDummyConvo = {
             users: [{ _id: user._id, name: user.name }],
             messages: [],
+            dummy: true,
         }
         setConvos([...convos, newDummyConvo])
+        setCurrentConvo(newDummyConvo)
         const updatedConvo = await createConvo()
         refreshState(updatedConvo)
     } // create dummy convo with current user name stored in user context {users:[{_id:user._id name:user.name}]}
@@ -62,7 +64,7 @@ export default function ChatRoom() {
     }
 
     const deleteConvo = async (convoId) => {
-        // dummy convos is convos filtered by convoId, set then call refresh
+        // dummy convos is convos filtered by convoId, set then call refresh OR ...just set convos to filtered and current to null
         await removeConvo(convoId)
         refreshState(null)
     }
