@@ -164,7 +164,6 @@ export default function ChatRoom() {
             profilePictureUrl: user.profilePictureUrl,
         }
         dummyConvo.messages.push(dummyMsg)
-        //
         const updatedConvos = [...convos]
 
         const index = updatedConvos.findIndex(
@@ -173,13 +172,12 @@ export default function ChatRoom() {
 
         if (index !== -1) {
             updatedConvos[index] = dummyConvo
-            setCurrentConvo(dummyConvo)
+            setCurrentConvo(dummyConvo) // We add message to state object before hitting backend...
             setConvos(updatedConvos)
         }
-        //
         const updatedconvo = await sendMsg(convoId, msgText)
         refreshState(updatedconvo)
-    } // you can add message to state object before hitting backend...
+    }
 
     return (
         <div className="container flex h-screen w-full gap-2">

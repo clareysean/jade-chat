@@ -13,17 +13,17 @@ export default async function sendRequest(url, method = 'GET', payload = null) {
         // Prefacing with 'Bearer' is recommended in the HTTP specification
         options.headers.Authorization = `Bearer ${token}`
     }
-    console.log(payload)
+
     if (payload instanceof FormData) {
         console.log(`yup file`)
         // If the payload is FormData, don't set 'Content-Type'
         options.body = payload
     } else if (payload) {
-        options.headers = { 'Content-Type': 'application/json' }
+        // Check if options.headers exists, and if not, initialize it
+        options.headers ||= {}
+        options.headers['Content-Type'] = 'application/json'
         options.body = JSON.stringify(payload)
     }
-
-    console.log(options)
 
     const res = await fetch(url, options)
 

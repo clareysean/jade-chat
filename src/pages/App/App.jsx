@@ -7,10 +7,14 @@ import AuthPage from '../AuthPage/AuthPage'
 import NavBar from '../../components/NavBar/NavBar'
 import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
+// import { io } from 'socket.io-client'
+
+// const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
 
 export const UserContext = createContext([])
 export const DisplayUserContext = createContext([])
 export const ActiveUsersContext = createContext([])
+export const WebSocketContext = createContext([])
 
 export default function App() {
     const [user, setUser] = useState(null) // from token
@@ -39,6 +43,7 @@ export default function App() {
     }, [user])
 
     return (
+        // <WebSocketContext.Provider value={socket}>
         <ActiveUsersContext.Provider value={[activeUsers, setActiveUsers]}>
             <DisplayUserContext.Provider value={[displayUser, setDisplayUser]}>
                 <UserContext.Provider value={[user, setUser]}>
@@ -62,5 +67,6 @@ export default function App() {
                 </UserContext.Provider>
             </DisplayUserContext.Provider>
         </ActiveUsersContext.Provider>
+        // </WebSocketContext.Provider>
     )
 }

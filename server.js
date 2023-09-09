@@ -21,7 +21,9 @@ app.use(fileUpload())
 app.use(require('./config/checkToken'))
 
 app.use('/api/users', require('./routes/api/users'))
-app.use('/api/messaging', require('./routes/api/messaging'))
+
+const ensureLoggedIn = require('./config/ensureLoggedIn')
+app.use('/api/messaging', ensureLoggedIn, require('./routes/api/messaging'))
 
 const port = process.env.PORT || 3001
 

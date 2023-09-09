@@ -150,6 +150,8 @@ async function uploadPhoto(req, res) {
     }
 }
 
+//TODO on photo upload delete existing photo if it exists
+
 async function deletePhoto(req, res) {
     try {
         const fileName = req.params.fileName // Assuming you pass the file name to delete as a URL parameter
@@ -180,6 +182,8 @@ async function deletePhoto(req, res) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
+
+//TODO on photo upload delete existing photo if it exists
 
 async function getDisplayUser(req, res) {
     const currentUserId = req.user._id
