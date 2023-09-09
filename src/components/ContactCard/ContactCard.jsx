@@ -1,5 +1,6 @@
 import { React, useContext } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { DisplayUserContext } from '../../pages/App/App'
 
 export default function ContactCard({
     handleAddToConvo,
@@ -19,9 +20,10 @@ export default function ContactCard({
 
     return (
         <div className="bg-emerald m-2 flex h-24 space-x-12 p-6 shadow-md">
-            {contact.pictureUrl ? (
+            {contact.profilePictureUrl ? (
                 <img
-                    src={contact.pictureUrl}
+                    className="mx-auto inline h-10 w-10 rounded-full"
+                    src={contact.profilePictureUrl}
                     alt={`${contact.name}'s picture`}
                 />
             ) : (

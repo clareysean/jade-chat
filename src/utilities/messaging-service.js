@@ -13,6 +13,4 @@ export async function createConvo() {
 export async function removeConvo(convoId) {
     const removedConvo = await messagingAPI.removeConvo(convoId)
     return removedConvo
-}
-
-
+}*/

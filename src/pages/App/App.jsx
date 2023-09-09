@@ -1,6 +1,7 @@
 import { useState, createContext, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { getUser, getActiveUsers } from '../../utilities/users-service'
+import { getDisplayUser } from '../../utilities/users-api'
 import './App.css'
 import AuthPage from '../AuthPage/AuthPage'
 import NavBar from '../../components/NavBar/NavBar'
@@ -8,18 +9,25 @@ import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
 
 export const UserContext = createContext([])
+export const DisplayUserContext = createContext([])
 export const ActiveUsersContext = createContext([])
 
 export default function App() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null) // from token
+    const [displayUser, setDisplayUser] = useState(null)
     const [activeUsers, setActiveUsers] = useState([])
 
     useEffect(() => {
         async function fetchUser() {
-            const fetchedUser = await getUser()
+            const fetchedUser = await getUser() // from auth token
             setUser(fetchedUser)
         }
+        async function fetchDisplayUser() {
+            const fetchedDisplayUser = await getDisplayUser() // from db
+            setDisplayUser(fetchedDisplayUser)
+        }
         fetchUser()
+        fetchDisplayUser()
     }, [])
 
     useEffect(() => {
@@ -32,25 +40,27 @@ export default function App() {
 
     return (
         <ActiveUsersContext.Provider value={[activeUsers, setActiveUsers]}>
-            <UserContext.Provider value={[user, setUser]}>
-                <main className="App h-4/5 w-full">
-                    {user ? (
-                        <>
-                            <NavBar />
-                            <ChatRoom />
-                            <Routes>
-                                {/* Route components in here */}
-                                <Route
-                                    path="/profile"
-                                    element={<ProfilePage />}
-                                />
-                            </Routes>
-                        </>
-                    ) : (
-                        <AuthPage />
-                    )}
-                </main>
-            </UserContext.Provider>
+            <DisplayUserContext.Provider value={[displayUser, setDisplayUser]}>
+                <UserContext.Provider value={[user, setUser]}>
+                    <main className="App h-4/5 w-full">
+                        {user ? (
+                            <>
+                                <NavBar />
+                                <Routes>
+                                    {/* Route components in here */}
+                                    <Route
+                                        path="/profile"
+                                        element={<ProfilePage />}
+                                    />
+                                    <Route path="/" element={<ChatRoom />} />
+                                </Routes>
+                            </>
+                        ) : (
+                            <AuthPage />
+                        )}
+                    </main>
+                </UserContext.Provider>
+            </DisplayUserContext.Provider>
         </ActiveUsersContext.Provider>
     )
 }

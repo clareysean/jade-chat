@@ -2,6 +2,14 @@ const User = require('../../models/user')
 const { Conversation } = require('../../models/conversation')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { v4: uuidv4 } = require('uuid') // Import the uuid library
+const {
+    S3Client,
+    PutObjectCommand,
+    DeleteObjectCommand,
+} = require('@aws-sdk/client-s3')
+const s3Config = require('../../config/s3Config')
+const s3Client = new S3Client(s3Config)
 
 module.exports = {
     create,
@@ -10,6 +18,9 @@ module.exports = {
     getActiveUsers,
     addToConvo,
     removeFromConvo,
+    uploadPhoto,
+    deletePhoto,
+    getDisplayUser,
 }
 
 async function create(req, res) {
@@ -109,5 +120,74 @@ async function removeFromConvo(req, res) {
     } catch (error) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+async function uploadPhoto(req, res) {
+    const file = req.files.file
+    const fileExtension = file.name.split('.').pop() // Get the file extension
+    const uuid = uuidv4() // generates a unique identifier string
+    // Take the first 8 characters as a unique string
+    const uniqueString = uuid.slice(0, 8)
+    const uniqueFileName = `${uniqueString}.${fileExtension}`
+    const bucketParams = {
+        Bucket: process.env.S3_BUCKET,
+        Key: uniqueFileName,
+        Body: file.data,
+    }
+    try {
+        await s3Client.send(new PutObjectCommand(bucketParams))
+        const s3Url = `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${uniqueFileName}`
+
+        const query = { _id: req.user._id }
+        const update = { $set: { profilePictureUrl: s3Url } }
+        const options = { upsert: true }
+
+        const updatedUser = await User.updateOne(query, update, options)
+        res.json(updatedUser)
+    } catch (err) {
+        console.log('Error', err)
+        res.status(500).send('Error uploading object')
+    }
+}
+
+async function deletePhoto(req, res) {
+    try {
+        const fileName = req.params.fileName // Assuming you pass the file name to delete as a URL parameter
+        console.log(fileName)
+        const bucketParams = {
+            Bucket: process.env.S3_BUCKET,
+            Key: fileName, // Specify the file name you want to delete
+        }
+
+        const deleteResponse = await s3Client.send(
+            new DeleteObjectCommand(bucketParams)
+        )
+        console.log(deleteResponse)
+
+        if (deleteResponse) {
+            const currentUserId = req.user._id
+            const updatedUser = await User.findByIdAndUpdate(
+                currentUserId,
+                { $unset: { profilePictureUrl: '' } }, // Use $unset to remove the profilePictureUrl field
+                { new: true }
+            )
+            res.status(200).json({ message: 'File deleted successfully' })
+        } else {
+            res.status(404).json({ error: 'File not found' })
+        }
+    } catch (err) {
+        console.error('Error:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+async function getDisplayUser(req, res) {
+    const currentUserId = req.user._id
+    try {
+        const displayUser = await User.findById(currentUserId)
+        res.json(displayUser)
+    } catch (error) {
+        console.error('Error:', err)
+        res.status(404).json({ error: 'Internal Server Error: User not found' })
     }
 }

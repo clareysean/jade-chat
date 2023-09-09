@@ -15,7 +15,7 @@ export default function ConvoWindow({
     }
 
     return (
-        <div className="container h-full w-1/4 bg-slate-300 p-2 shadow-md">
+        <div className="container h-full w-1/4 bg-slate-300 p-2 shadow-md transition duration-150 ease-out">
             Conversations
             <div className="h-4/5 rounded-lg bg-emerald-200 p-2">
                 {convos

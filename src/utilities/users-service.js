@@ -57,3 +57,13 @@ export async function addUserToConvo(contactId, convoId) {
     const addedUser = await usersAPI.addUserToConvo(contactId, convoId)
     return addedUser
 }
+
+export async function deletePhotoFromDB(url) {
+    console.log(`in the service ${url}`)
+    // Extract the uid key from the file url on the user
+    const urlParts = url.split('/')
+    console.log(`in the service parts of url =  ${urlParts}`)
+    const fileName = urlParts[urlParts.length - 1]
+    usersAPI.deletePhoto(fileName)
+    return
+}

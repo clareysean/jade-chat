@@ -18,6 +18,8 @@ export default function NavBar() {
             &nbsp; | &nbsp;
             <Link to="/profile">Your Profile</Link>
             &nbsp; | &nbsp;
+            <Link to="/">Chat</Link>
+            &nbsp; | &nbsp;
             <Link to="" onClick={handleLogOut}>
                 Log Out
             </Link>

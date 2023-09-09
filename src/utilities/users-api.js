@@ -25,3 +25,16 @@ export function addUserToConvo(contactId, convoId) {
 export function removeUserFromConvo(contactId, convoId) {
     return sendRequest(`${BASE_URL}/${convoId}/${contactId}`, 'DELETE')
 }
+
+export function uploadImage(data) {
+    console.log(data)
+    return sendRequest(`${BASE_URL}/upload`, 'POST', data)
+}
+
+export function deletePhoto(fileName) {
+    return sendRequest(`${BASE_URL}/${fileName}`, 'DELETE')
+}
+
+export function getDisplayUser() {
+    return sendRequest(`${BASE_URL}/user`, 'GET')
+}

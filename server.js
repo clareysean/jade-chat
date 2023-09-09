@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
 const logger = require('morgan')
-// Always require and configure near the top
+const fileUpload = require('express-fileupload')
 require('dotenv').config()
 // Connect to the database
 require('./config/database')
@@ -17,7 +17,9 @@ app.use(express.urlencoded({ extended: true }))
 // to serve from the production 'build' folder
 app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')))
 app.use(express.static(path.join(__dirname, 'build')))
+app.use(fileUpload())
 app.use(require('./config/checkToken'))
+
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/messaging', require('./routes/api/messaging'))
 

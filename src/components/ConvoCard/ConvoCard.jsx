@@ -11,15 +11,19 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
         <div
             className={
                 convo._id === currentConvo?._id
-                    ? 'm-2 h-16 rounded-sm bg-slate-300 shadow-md'
-                    : 'm-2 h-16 rounded-sm bg-slate-200 shadow-md'
+                    ? 'm-2 h-20 rounded-sm bg-slate-300 shadow-md'
+                    : 'm-2 h-20 rounded-sm bg-slate-200 shadow-md'
             }
             onClick={(e) => handleConvoSelect(e, convo)}
         >
             {convo.users.map((user, i) => (
                 <Fragment key={user._id}>
                     {user.profilePictureUrl && (
-                        <img src={user.profilePictureUrl} alt={user.name} />
+                        <img
+                            className="mx-auto inline h-10 w-10 rounded-full"
+                            src={user.profilePictureUrl}
+                            alt={user.name}
+                        />
                     )}
                     <span>
                         {user.name}
