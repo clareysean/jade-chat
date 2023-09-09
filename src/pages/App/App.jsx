@@ -7,9 +7,9 @@ import AuthPage from '../AuthPage/AuthPage'
 import NavBar from '../../components/NavBar/NavBar'
 import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
-// import { io } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
-// const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
+const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
 
 export const UserContext = createContext([])
 export const DisplayUserContext = createContext([])
@@ -43,30 +43,35 @@ export default function App() {
     }, [user])
 
     return (
-        // <WebSocketContext.Provider value={socket}>
-        <ActiveUsersContext.Provider value={[activeUsers, setActiveUsers]}>
-            <DisplayUserContext.Provider value={[displayUser, setDisplayUser]}>
-                <UserContext.Provider value={[user, setUser]}>
-                    <main className="App h-4/5 w-full">
-                        {user ? (
-                            <>
-                                <NavBar />
-                                <Routes>
-                                    {/* Route components in here */}
-                                    <Route
-                                        path="/profile"
-                                        element={<ProfilePage />}
-                                    />
-                                    <Route path="/" element={<ChatRoom />} />
-                                </Routes>
-                            </>
-                        ) : (
-                            <AuthPage />
-                        )}
-                    </main>
-                </UserContext.Provider>
-            </DisplayUserContext.Provider>
-        </ActiveUsersContext.Provider>
-        // </WebSocketContext.Provider>
+        <WebSocketContext.Provider value={socket}>
+            <ActiveUsersContext.Provider value={[activeUsers, setActiveUsers]}>
+                <DisplayUserContext.Provider
+                    value={[displayUser, setDisplayUser]}
+                >
+                    <UserContext.Provider value={[user, setUser]}>
+                        <main className="App h-4/5 w-full">
+                            {user ? (
+                                <>
+                                    <NavBar />
+                                    <Routes>
+                                        {/* Route components in here */}
+                                        <Route
+                                            path="/profile"
+                                            element={<ProfilePage />}
+                                        />
+                                        <Route
+                                            path="/"
+                                            element={<ChatRoom />}
+                                        />
+                                    </Routes>
+                                </>
+                            ) : (
+                                <AuthPage />
+                            )}
+                        </main>
+                    </UserContext.Provider>
+                </DisplayUserContext.Provider>
+            </ActiveUsersContext.Provider>
+        </WebSocketContext.Provider>
     )
 }

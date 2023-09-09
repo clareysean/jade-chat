@@ -11,7 +11,7 @@ import {
 import ConvoWindow from '../../components/ConvoWindow/ConvoWindow'
 import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
-import { UserContext } from '../App/App'
+import { UserContext, WebSocketContext } from '../App/App'
 
 export const ConvoContext = createContext([])
 
@@ -20,6 +20,7 @@ export default function ChatRoom() {
     const [currentConvo, setCurrentConvo] = useState(null)
     const [error, setError] = useState('')
     const [user, setUser] = useContext(UserContext)
+    const socket = useContext(WebSocketContext)
 
     useEffect(() => {
         async function fetchConvos() {
@@ -28,6 +29,26 @@ export default function ChatRoom() {
         }
         fetchConvos()
     }, [])
+
+    useEffect(() => {
+        // Add a listener for the receive_message event
+        socket.on('receive_message', (message) => {
+            // Use functional updates for setCurrentConvo to ensure access to the latest state
+            console.log(message)
+            setCurrentConvo((prevCurrentConvo) => {
+                const dummyConvo = { ...prevCurrentConvo }
+                dummyConvo.dummy = true
+                const dummyMsg = message
+                dummyConvo.messages.push(dummyMsg)
+                return dummyConvo
+            })
+        })
+
+        // Clean up the listener when the component unmounts
+        return () => {
+            socket.off('receive_message')
+        }
+    }, [socket])
 
     function checkIfCurrentExists() {
         if (currentConvo === null || currentConvo === undefined) {
@@ -155,26 +176,36 @@ export default function ChatRoom() {
     }
 
     const sendMessage = async (convoId, msgText) => {
-        const dummyConvo = { ...currentConvo }
-        dummyConvo.dummy = true
-        const dummyMsg = {
-            user: user._id,
-            text: msgText,
-            userName: user.name,
-            profilePictureUrl: user.profilePictureUrl,
-        }
-        dummyConvo.messages.push(dummyMsg)
-        const updatedConvos = [...convos]
+        // const dummyConvo = { ...currentConvo }
+        // dummyConvo.dummy = true
+        // const dummyMsg = {
+        //     user: user._id,
+        //     text: msgText,
+        //     userName: user.name,
+        //     profilePictureUrl: user.profilePictureUrl,
+        // }
+        // dummyConvo.messages.push(dummyMsg)
+        // const updatedConvos = [...convos]
 
-        const index = updatedConvos.findIndex(
-            (convo) => convo._id === currentConvo._id
-        )
+        // const index = updatedConvos.findIndex(
+        //     (convo) => convo._id === currentConvo._id
+        // )
+        // // necessary?
+        // if (index !== -1) {
+        //     updatedConvos[index] = dummyConvo
+        //     setCurrentConvo(dummyConvo) // We add message to state object before hitting backend...
+        //     setConvos(updatedConvos)
+        // }
 
-        if (index !== -1) {
-            updatedConvos[index] = dummyConvo
-            setCurrentConvo(dummyConvo) // We add message to state object before hitting backend...
-            setConvos(updatedConvos)
-        }
+        socket.emit('send_message', {
+            message: {
+                user: user._id,
+                text: msgText,
+                userName: user.name,
+                profilePictureUrl: user.profilePictureUrl,
+            },
+            room: convoId, // Use the conversation ID as the room name
+        })
         const updatedconvo = await sendMsg(convoId, msgText)
         refreshState(updatedconvo)
     }
