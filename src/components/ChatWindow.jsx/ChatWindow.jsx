@@ -1,10 +1,16 @@
-import { React, useState, useContext, Fragment } from 'react'
+import { React, useState, useContext } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import MessageCard from '../MessageCard/MessageCard'
+import { DisplayUserContext } from '../../pages/App/App'
 
-export default function ChatWindow({ handleSendMessage, deleteMessage }) {
+export default function ChatWindow({
+    handleSendMessage,
+    deleteMessage,
+    removeFromConvo,
+}) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [displayUser, getDisplayUser] = useContext(DisplayUserContext)
     const [error, setError] = useState('')
 
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
@@ -34,21 +40,43 @@ export default function ChatWindow({ handleSendMessage, deleteMessage }) {
         deleteMessage(msgId)
     }
 
+    const handleLeaveConvo = (contactId) => {
+        removeFromConvo(contactId)
+    }
+
     return (
         <div id="container" className="bg-emerald-100">
-            {currentConvo?.users.map(
-                (
-                    user,
-                    i // display the names of the users in the currentConvo
-                ) => (
-                    <Fragment key={user._id}>
-                        <span>
-                            {user.name}
-                            {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
-                        </span>
-                    </Fragment>
-                )
-            )}
+            <div className="flex px-4 py-1">
+                {currentConvo?.users.map(
+                    (
+                        user,
+                        i // display the names of the users in the currentConvo
+                    ) => (
+                        <div
+                            className="col-end- col-start-1 self-start"
+                            key={user._id}
+                        >
+                            <span>
+                                {user.name}
+                                {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
+                            </span>
+                        </div>
+                    )
+                )}
+                <div className="w-64 flex-initial"></div>
+                {currentConvo && currentConvo.users.length > 1 ? (
+                    <button
+                        disabled={currentConvo?.dummy === true}
+                        onClick={() => {
+                            handleLeaveConvo(displayUser._id)
+                        }}
+                        className="rounded bg-red-200 p-1"
+                    >
+                        Leave chat
+                    </button>
+                ) : null}
+            </div>
+
             <div id="chat-window" className="w-md h-4/5 bg-slate-200 shadow-md">
                 {currentConvo?.messages.map((message) => (
                     <MessageCard

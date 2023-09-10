@@ -40,8 +40,6 @@ const port = process.env.PORT || 3001
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`)
 
-    // Add this
-    // Add a user to a room
     socket.on('join_room', (data) => {
         const { username, room } = data // Data sent from client when join_room event emitted
         socket.join(room) // Join the user to a socket room
@@ -49,9 +47,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('send_message', (data) => {
-        console.log(`server ran`)
         const { message, room } = data
         io.in(room).emit('receive_message', message) // Send to all users in room, including sender
+    })
+
+    socket.on('convo_leave', (data) => {
+        console.log(`server ran`)
+        const { convo, room } = data
+        io.in(room).emit('convo_leave', convo) // Send to all users in room, including sender
     })
 })
 // Put API routes here, before the "catch all" route

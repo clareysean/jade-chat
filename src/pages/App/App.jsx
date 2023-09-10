@@ -30,14 +30,9 @@ export default function App() {
             const fetchedDisplayUser = await getDisplayUser() // from db
             setDisplayUser(fetchedDisplayUser)
         }
-        async function fetchActiveUsers() {
-            const fetchedActiveUsers = await getActiveUsers()
-            setActiveUsers(fetchedActiveUsers)
-        }
 
         fetchUser()
         fetchDisplayUser()
-        fetchActiveUsers()
 
         // Create the WebSocket connection here with proper cleanup
         const socket = io('http://localhost:3001')
@@ -47,6 +42,15 @@ export default function App() {
             socket.disconnect()
         }
     }, [])
+
+    useEffect(() => {
+        async function fetchActiveUsers() {
+            const fetchedActiveUsers = await getActiveUsers()
+            setActiveUsers(fetchedActiveUsers)
+        }
+
+        fetchActiveUsers()
+    }, [user])
 
     return (
         <WebSocketContext.Provider value={socket}>

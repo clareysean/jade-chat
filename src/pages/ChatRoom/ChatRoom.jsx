@@ -11,7 +11,7 @@ import {
 import ConvoWindow from '../../components/ConvoWindow/ConvoWindow'
 import ChatWindow from '../../components/ChatWindow.jsx/ChatWindow'
 import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
-import { UserContext, WebSocketContext } from '../App/App'
+import { DisplayUserContext, UserContext, WebSocketContext } from '../App/App'
 
 export const ConvoContext = createContext([])
 
@@ -20,6 +20,7 @@ export default function ChatRoom() {
     const [currentConvo, setCurrentConvo] = useState(null)
     const [error, setError] = useState('')
     const [user, setUser] = useContext(UserContext)
+    const [displayUser, setDisplayUser] = useContext(DisplayUserContext)
     const socket = useContext(WebSocketContext)
 
     useEffect(() => {
@@ -31,7 +32,6 @@ export default function ChatRoom() {
     }, [])
 
     useEffect(() => {
-        console.log(`i ran`)
         // Add a listener for the receive_message event
         socket.on('receive_message', (message) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
@@ -45,9 +45,17 @@ export default function ChatRoom() {
             })
         })
 
+        socket.on('convo_leave', (data) => {
+            // Use functional updates for setCurrentConvo to ensure access to the latest state
+            console.log(data.dummyConvo)
+            console.log(`client side`)
+            setCurrentConvo(data.dummyConvo)
+        })
+
         // Clean up the listener when the component unmounts
         return () => {
             socket.off('receive_message')
+            socket.off('convo_leave')
         }
     }, [])
 
@@ -122,22 +130,19 @@ export default function ChatRoom() {
                 (user) => user._id !== contactId
             )
 
-            const updatedConvos = [...convos]
+            console.log(dummyConvo)
 
-            const index = updatedConvos.findIndex(
-                (convo) => convo._id === currentConvo._id
-            )
-
-            if (index !== -1) {
-                updatedConvos[index] = dummyConvo
-                setCurrentConvo(dummyConvo)
-                setConvos(updatedConvos)
-            }
-
-            // Then remove on the database
+            socket.emit('convo_leave', {
+                convo: {
+                    dummyConvo,
+                },
+                room: currentConvo._id, // Use the conversation ID as the room name
+            })
             const convoId = currentConvo._id
             const updatedConvo = await removeUserFromConvo(contactId, convoId)
-            refreshState(updatedConvo)
+            contactId === displayUser._id
+                ? refreshState(null) // if it's you leaving, wipe current for user // creates a bit of a strange UX, potential for refactor
+                : refreshState(updatedConvo)
         }
     }
 
@@ -147,7 +152,6 @@ export default function ChatRoom() {
         setConvos(updatedConvos)
         setCurrentConvo(null)
         removeConvo(convoId)
-        // refreshState(null)
     }
 
     const deleteMessage = async (msgId) => {
@@ -177,27 +181,6 @@ export default function ChatRoom() {
     }
 
     const sendMessage = async (convoId, msgText) => {
-        // const dummyConvo = { ...currentConvo }
-        // dummyConvo.dummy = true
-        // const dummyMsg = {
-        //     user: user._id,
-        //     text: msgText,
-        //     userName: user.name,
-        //     profilePictureUrl: user.profilePictureUrl,
-        // }
-        // dummyConvo.messages.push(dummyMsg)
-        // const updatedConvos = [...convos]
-
-        // const index = updatedConvos.findIndex(
-        //     (convo) => convo._id === currentConvo._id
-        // )
-        // // necessary?
-        // if (index !== -1) {
-        //     updatedConvos[index] = dummyConvo
-        //     setCurrentConvo(dummyConvo) // We add message to state object before hitting backend...
-        //     setConvos(updatedConvos)
-        // }
-
         socket.emit('send_message', {
             message: {
                 user: user._id,
@@ -223,6 +206,7 @@ export default function ChatRoom() {
                 <ChatWindow
                     handleSendMessage={sendMessage}
                     deleteMessage={deleteMessage}
+                    removeFromConvo={removeFromConvo}
                 />
                 <ContactsWindow
                     addToConvo={addToConvo}
