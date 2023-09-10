@@ -59,7 +59,7 @@ export default function App() {
                     value={[displayUser, setDisplayUser]}
                 >
                     <UserContext.Provider value={[user, setUser]}>
-                        <main className="App h-4/5 w-full">
+                        <main className="App mt-5 h-4/5 w-full">
                             {user ? (
                                 <>
                                     <NavBar />

@@ -18,9 +18,9 @@ export default function ConvoWindow({
     }
 
     return (
-        <div className="container h-full w-1/4 bg-slate-300 p-2 shadow-md transition duration-150 ease-out">
+        <div className="menu-card text-left">
             Conversations
-            <div className="h-4/5 rounded-lg bg-emerald-200 p-2">
+            <div className="h-4/5 rounded-lg bg-white p-2">
                 {convos
                     ? convos.map((convo) => (
                           <ConvoCard
@@ -35,7 +35,7 @@ export default function ConvoWindow({
             <button
                 disabled={currentConvo?.dummy === true}
                 onClick={() => handleCreateConvo()}
-                className="btn my-1 rounded bg-emerald-800 p-2 text-white"
+                className="btn-primary w-full"
             >
                 New Conversation
             </button>

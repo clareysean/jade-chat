@@ -20,27 +20,30 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
     }
 
     return (
-        <div className="container h-full w-1/4 bg-slate-200 shadow-md">
+        <div className="menu-card text-left">
             <h1>Users</h1>
-            {activeUsers.map((user) => (
-                <ContactCard
-                    handleAddToConvo={() =>
-                        handleAddToConvo(
-                            user._id,
-                            user.profilePictureUrl,
-                            user.name
-                        )
-                    }
-                    handleRemoveFromConvo={() =>
-                        handleRemoveFromConvo(user._id)
-                    }
-                    key={user._id}
-                    contact={user}
-                    {...(user.profilePictureUrl && {
-                        profilePictureUrl: user.profilePictureUrl,
-                    })}
-                />
-            ))}
+            <div className="h-4/5 rounded-lg bg-white p-2">
+                {activeUsers.map((user) => (
+                    <ContactCard
+                        handleAddToConvo={() =>
+                            handleAddToConvo(
+                                user._id,
+                                user.profilePictureUrl,
+                                user.name
+                            )
+                        }
+                        handleRemoveFromConvo={() =>
+                            handleRemoveFromConvo(user._id)
+                        }
+                        key={user._id}
+                        contact={user}
+                        {...(user.profilePictureUrl && {
+                            profilePictureUrl: user.profilePictureUrl,
+                        })}
+                    />
+                ))}
+            </div>
+
             <p className="error-message">&nbsp;{error}</p>
         </div>
     )

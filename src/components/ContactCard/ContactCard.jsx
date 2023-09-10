@@ -19,7 +19,7 @@ export default function ContactCard({
     }
 
     return (
-        <div className="bg-emerald m-2 flex h-24 space-x-12 p-6 shadow-md">
+        <div className="bg-emerald m-2 flex h-24 space-x-12 rounded p-6 shadow-md">
             {contact.profilePictureUrl ? (
                 <img
                     className="mx-auto inline h-10 w-10 rounded-full"

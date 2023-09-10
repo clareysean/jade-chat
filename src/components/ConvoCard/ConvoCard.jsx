@@ -11,8 +11,8 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
         <div
             className={
                 convo._id === currentConvo?._id
-                    ? 'm-2 h-20 rounded-sm bg-slate-300 shadow-md'
-                    : 'm-2 h-20 rounded-sm bg-slate-200 shadow-md'
+                    ? 'drop-shadow-[0_3px_3px_rgba(85, 228, 179, 0.8)] m-2 h-20 rounded-md bg-slate-300'
+                    : 'm-2 h-20 rounded-md bg-slate-100 shadow-sm'
             }
             onClick={(e) => handleConvoSelect(e, convo)}
         >
@@ -20,7 +20,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
                 <Fragment key={user._id}>
                     {user.profilePictureUrl && (
                         <img
-                            className="mx-auto inline h-10 w-10 rounded-full"
+                            className="mx-2 my-3 inline h-10 w-10 rounded-full"
                             src={user.profilePictureUrl}
                             alt={user.name}
                         />
@@ -35,7 +35,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             {user._id === convo.createdByUser ? (
                 <button
                     disabled={convo?.dummy === true}
-                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                    className="btn my-1 rounded bg-red-200 p-2 text-xs text-slate-900"
                     onClick={deleteConvo}
                 >
                     Delete Conversation
