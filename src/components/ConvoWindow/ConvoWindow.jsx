@@ -18,7 +18,7 @@ export default function ConvoWindow({
     }
 
     return (
-        <div className="menu-card text-left">
+        <div className="menu-card text-left text-slate-600">
             Conversations
             <div className="h-4/5 rounded-lg bg-white p-2">
                 {convos
@@ -42,3 +42,5 @@ export default function ConvoWindow({
         </div>
     )
 }
+
+// TODO push button to bottom - deal with smaller screens - deploy

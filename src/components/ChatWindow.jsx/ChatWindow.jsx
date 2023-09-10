@@ -2,6 +2,7 @@ import { React, useState, useContext } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import MessageCard from '../MessageCard/MessageCard'
 import { DisplayUserContext } from '../../pages/App/App'
+import { ReactComponent as ReactLogo } from '../../images/send-alt-1-svgrepo-com.svg'
 
 export default function ChatWindow({
     handleSendMessage,
@@ -47,23 +48,24 @@ export default function ChatWindow({
     return (
         <div
             id="container"
-            className="min-h-content h-4/5 w-1/2 rounded-lg bg-slate-100 bg-white p-2"
+            className="min-h-content h-5/6 w-1/2 rounded-lg bg-slate-100 bg-white p-2"
         >
             <div className="flex px-4 py-1">
-                {currentConvo?.users.map(
-                    (
-                        user,
-                        i // display the names of the users in the currentConvo
-                    ) => (
-                        <div className="text-slate-600" key={user._id}>
-                            <span>
-                                {user.name}
-                                {i < convoUsersLength - 1 ? ',' : ''}&nbsp;
-                            </span>
-                        </div>
-                    )
-                )}
-                <div className="w-64 flex-initial"></div>
+                <div className="min-h-[40px]">
+                    {currentConvo
+                        ? currentConvo.users.map((user, i) => (
+                              <div className="text-slate-600" key={user._id}>
+                                  <span>
+                                      {user.name}
+                                      {i < convoUsersLength - 1 ? ',' : ''}
+                                      &nbsp;
+                                  </span>
+                              </div>
+                          ))
+                        : null}
+                </div>
+
+                <div className="grow"></div>
                 {currentConvo && currentConvo.users.length > 1 ? (
                     <button
                         disabled={currentConvo?.dummy === true}
@@ -92,14 +94,14 @@ export default function ChatWindow({
                 ))}
             </div>
 
-            <div className="flex rounded-lg bg-slate-200 p-2">
+            <div className="flex rounded-lg bg-slate-100 p-2 shadow-md">
                 <form
                     className="flex w-full justify-between"
                     autoComplete="off"
                     onSubmit={handleSubmitMessage}
                 >
                     <textarea
-                        className="grow resize-none"
+                        className="grow resize-none p-1"
                         type="text"
                         rows="3"
                         cols="40"
@@ -112,15 +114,17 @@ export default function ChatWindow({
                     />
                     <button
                         disabled={currentConvo?.dummy === true}
-                        className="btn h-full rounded bg-emerald-800 p-2 text-white"
+                        className="btn-primary"
                         type="submit"
                     >
-                        Send
+                        <ReactLogo />
                     </button>
                 </form>
             </div>
 
-            <p className="error-message">&nbsp;{error}</p>
+            {error === '' ? null : (
+                <p className="error-message">&nbsp;{error}</p>
+            )}
         </div>
     )
 }
