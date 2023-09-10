@@ -48,9 +48,6 @@ export default function ChatRoom() {
         })
 
         socket.on('convo_add', (data) => {
-            // Use functional updates for setCurrentConvo to ensure access to the latest state
-            console.log(data.dummyConvo)
-            console.log(`client side`)
             setCurrentConvo(data.dummyConvo)
         })
 
@@ -58,6 +55,7 @@ export default function ChatRoom() {
         return () => {
             socket.off('receive_message')
             socket.off('convo_leave')
+            socket.off('convo_add')
         }
     }, [])
 
@@ -195,7 +193,7 @@ export default function ChatRoom() {
                 user: user._id,
                 text: msgText,
                 userName: user.name,
-                profilePictureUrl: user.profilePictureUrl,
+                pictureUrl: user.profilePictureUrl,
             },
             room: convoId, // Use the conversation ID as the room name
         })

@@ -7,8 +7,14 @@ export default function MessageCard({ message, handleDeleteMessage }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
     return (
-        <div className="m-2 flex h-24 flex-col rounded-sm bg-slate-200 p-4 text-left shadow-md">
-            <h2 className="text-lg">{message.userName}</h2>
+        <div className="h-fit-content m-2 flex flex-col rounded-sm bg-slate-200 p-4 text-left shadow-md">
+            {message.pictureUrl ? (
+                <img
+                    className="inline h-10 w-10 rounded-full"
+                    src={message.pictureUrl}
+                ></img>
+            ) : null}
+            <h2 className="inline text-lg">{message.userName}</h2>
             <div className="flex">
                 <p className="inline-block w-4/5 rounded bg-white p-2">
                     {message.text}
