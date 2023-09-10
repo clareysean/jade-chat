@@ -34,18 +34,20 @@ export default function ChatRoom() {
     useEffect(() => {
         // Add a listener for the receive_message event
         socket.on('receive_message', (message) => {
-            // Use functional updates for setCurrentConvo to ensure access to the latest state
-
+            // Use functional update for setCurrentConvo to ensure access to latest state
             setCurrentConvo((prevCurrentConvo) => {
                 const dummyConvo = { ...prevCurrentConvo }
-
-                // dummyConvo.dummy = true
                 dummyConvo.messages.push(message)
                 return dummyConvo
             })
         })
 
         socket.on('convo_leave', (data) => {
+            // Use functional updates for setCurrentConvo to ensure access to the latest state
+            setCurrentConvo(data.dummyConvo)
+        })
+
+        socket.on('convo_add', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
             console.log(data.dummyConvo)
             console.log(`client side`)
@@ -100,17 +102,24 @@ export default function ChatRoom() {
             // push dummy user object to dummy currentConvo users array
             dummyConvo.users.push(userToAdd)
 
-            const updatedConvos = [...convos]
+            // const updatedConvos = [...convos]
 
-            const index = updatedConvos.findIndex(
-                (convo) => convo._id === currentConvo._id
-            )
+            // const index = updatedConvos.findIndex(
+            //     (convo) => convo._id === currentConvo._id
+            // )
 
-            if (index !== -1) {
-                updatedConvos[index] = dummyConvo
-                setCurrentConvo(dummyConvo)
-                setConvos(updatedConvos)
-            }
+            // if (index !== -1) {
+            //     updatedConvos[index] = dummyConvo
+            //     setCurrentConvo(dummyConvo)
+            //     setConvos(updatedConvos)
+            // }
+
+            socket.emit('convo_add', {
+                convo: {
+                    dummyConvo,
+                },
+                room: currentConvo._id, // Use the conversation ID as the room name
+            })
 
             // update state then...
             //call backend and update convo doc

@@ -52,9 +52,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('convo_leave', (data) => {
-        console.log(`server ran`)
         const { convo, room } = data
         io.in(room).emit('convo_leave', convo) // Send to all users in room, including sender
+    })
+
+    socket.on('convo_add', (data) => {
+        console.log(`server ran`)
+        const { convo, room } = data
+        io.in(room).emit('convo_add', convo) // Send to all users in room, including sender
     })
 })
 // Put API routes here, before the "catch all" route
