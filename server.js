@@ -49,6 +49,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('send_message', (data) => {
+        console.log(`server ran`)
         const { message, room } = data
         io.in(room).emit('receive_message', message) // Send to all users in room, including sender
     })

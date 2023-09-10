@@ -30,17 +30,23 @@ export default function App() {
             const fetchedDisplayUser = await getDisplayUser() // from db
             setDisplayUser(fetchedDisplayUser)
         }
-        fetchUser()
-        fetchDisplayUser()
-    }, [])
-
-    useEffect(() => {
         async function fetchActiveUsers() {
             const fetchedActiveUsers = await getActiveUsers()
             setActiveUsers(fetchedActiveUsers)
         }
+
+        fetchUser()
+        fetchDisplayUser()
         fetchActiveUsers()
-    }, [user])
+
+        // Create the WebSocket connection here with proper cleanup
+        const socket = io('http://localhost:3001')
+
+        // Cleanup the WebSocket connection when the component unmounts
+        return () => {
+            socket.disconnect()
+        }
+    }, [])
 
     return (
         <WebSocketContext.Provider value={socket}>

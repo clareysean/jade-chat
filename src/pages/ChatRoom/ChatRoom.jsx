@@ -31,15 +31,16 @@ export default function ChatRoom() {
     }, [])
 
     useEffect(() => {
+        console.log(`i ran`)
         // Add a listener for the receive_message event
         socket.on('receive_message', (message) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
-            console.log(message)
+
             setCurrentConvo((prevCurrentConvo) => {
                 const dummyConvo = { ...prevCurrentConvo }
-                dummyConvo.dummy = true
-                const dummyMsg = message
-                dummyConvo.messages.push(dummyMsg)
+
+                // dummyConvo.dummy = true
+                dummyConvo.messages.push(message)
                 return dummyConvo
             })
         })
@@ -48,7 +49,7 @@ export default function ChatRoom() {
         return () => {
             socket.off('receive_message')
         }
-    }, [socket])
+    }, [])
 
     function checkIfCurrentExists() {
         if (currentConvo === null || currentConvo === undefined) {
