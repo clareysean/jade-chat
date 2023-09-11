@@ -29,7 +29,7 @@ export default function ChatRoom() {
             setConvos(fetchedConvos)
         }
         fetchConvos()
-    }, [])
+    }, [currentConvo])
 
     useEffect(() => {
         // Add a listener for the receive_message event
@@ -147,6 +147,7 @@ export default function ChatRoom() {
             })
             const convoId = currentConvo._id
             const updatedConvo = await removeUserFromConvo(contactId, convoId)
+            console.log(updatedConvo)
             contactId === displayUser._id
                 ? refreshState(null) // if it's you leaving, wipe current for user // creates a bit of a strange UX, potential for refactor
                 : refreshState(updatedConvo)
