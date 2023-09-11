@@ -52,7 +52,7 @@ export default function ChatRoom() {
         })
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
-            console.log(`convo leave ran`)
+
             refreshState(data.updatedConvo)
         })
 
@@ -148,9 +148,7 @@ export default function ChatRoom() {
                 },
                 room: currentConvo._id, // Use the conversation ID as the room name
             })
-            contactId === displayUser._id
-                ? refreshState(null) // if it's you leaving, wipe current for user // creates a bit of a strange UX, potential for refactor
-                : refreshState(updatedConvo)
+            refreshState(updatedConvo)
         }
     }
 
@@ -192,9 +190,9 @@ export default function ChatRoom() {
         socket.emit('send_message', {
             message: {
                 user: {
-                    _id: user._id,
-                    name: user.name,
-                    profilePictureUrl: user.profilePictureUrl,
+                    _id: displayUser._id,
+                    name: displayUser.name,
+                    profilePictureUrl: displayUser.profilePictureUrl,
                 },
                 text: msgText,
                 dummy: true,

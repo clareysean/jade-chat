@@ -64,6 +64,6 @@ export async function deletePhotoFromDB(url) {
     const urlParts = url.split('/')
     console.log(`in the service parts of url =  ${urlParts}`)
     const fileName = urlParts[urlParts.length - 1]
-    usersAPI.deletePhoto(fileName)
-    return
+    const updatedUser = await usersAPI.deletePhoto(fileName)
+    return updatedUser
 }

@@ -185,7 +185,8 @@ async function deletePhoto(req, res) {
                 { $unset: { profilePictureUrl: '' } }, // Use $unset to remove the profilePictureUrl field
                 { new: true }
             )
-            res.status(200).json({ message: 'File deleted successfully' })
+            console.log(updatedUser)
+            res.json(updatedUser)
         } else {
             res.status(404).json({ error: 'File not found' })
         }
@@ -201,6 +202,8 @@ async function getDisplayUser(req, res) {
     const currentUserId = req.user._id
     try {
         const displayUser = await User.findById(currentUserId)
+        console.log(`ctrl`)
+        console.log(displayUser)
         res.json(displayUser)
     } catch (error) {
         console.error('Error:', err)
