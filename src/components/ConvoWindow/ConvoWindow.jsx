@@ -11,6 +11,9 @@ export default function ConvoWindow({
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const socket = useContext(WebSocketContext)
 
+    console.log(`convo window mounted`)
+    console.log(convos)
+
     const handleConvoSelect = (e, convo) => {
         if (e.target.nodeName === 'BUTTON') return
         socket.emit('join_room', { room: convo._id })

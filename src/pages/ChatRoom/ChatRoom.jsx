@@ -25,9 +25,10 @@ export default function ChatRoom() {
 
     const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos()
-        console.log(updatedCurrent) //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
+        console.log(`refresh state ran`)
+        console.log(updatedCurrent)
+        setCurrentConvo(updatedCurrent) //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
         setConvos(fetchedConvos)
-        setCurrentConvo(updatedCurrent)
     }
 
     useEffect(() => {
@@ -44,7 +45,6 @@ export default function ChatRoom() {
         socket.on('receive_message', (message) => {
             // Use functional update for setCurrentConvo to ensure access to latest state
             setCurrentConvo((prevCurrentConvo) => {
-                console.log(`i ran`)
                 const dummyConvo = { ...prevCurrentConvo }
                 dummyConvo.messages.push(message)
                 return dummyConvo
@@ -52,11 +52,13 @@ export default function ChatRoom() {
         })
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
-            setCurrentConvo(data.dummyConvo)
+            console.log(`convo leave ran`)
+            refreshState(data.updatedConvo)
         })
 
         socket.on('convo_add', (data) => {
-            setCurrentConvo(data.dummyConvo)
+            console.log(`convo add ran`)
+            refreshState(data.updatedConvo)
         })
         // Clean up the listener when the component unmounts
         return () => {
@@ -112,17 +114,16 @@ export default function ChatRoom() {
                 setConvos(updatedConvos)
             }
 
-            socket.emit('convo_add', {
-                convo: {
-                    dummyConvo,
-                },
-                room: currentConvo._id, // Use the conversation ID as the room name
-            })
-
             // update state then...
             //call backend and update convo doc
             const convoId = currentConvo._id
             const updatedConvo = await addUserToConvo(contactId, convoId)
+            socket.emit('convo_add', {
+                convo: {
+                    updatedConvo,
+                },
+                room: currentConvo._id, // Use the conversation ID as the room name
+            })
             refreshState(updatedConvo)
         }
         return
@@ -139,15 +140,14 @@ export default function ChatRoom() {
 
             console.log(dummyConvo)
 
+            const convoId = currentConvo._id
+            const updatedConvo = await removeUserFromConvo(contactId, convoId)
             socket.emit('convo_leave', {
                 convo: {
-                    dummyConvo,
+                    updatedConvo,
                 },
                 room: currentConvo._id, // Use the conversation ID as the room name
             })
-            const convoId = currentConvo._id
-            const updatedConvo = await removeUserFromConvo(contactId, convoId)
-            console.log(updatedConvo)
             contactId === displayUser._id
                 ? refreshState(null) // if it's you leaving, wipe current for user // creates a bit of a strange UX, potential for refactor
                 : refreshState(updatedConvo)

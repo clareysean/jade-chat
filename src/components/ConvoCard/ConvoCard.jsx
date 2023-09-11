@@ -8,6 +8,8 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [user, setUser] = useContext(UserContext)
     const convoUsersLength = convo.users.length
 
+    console.log(`COnvo card mount`)
+
     return (
         <div
             className={
