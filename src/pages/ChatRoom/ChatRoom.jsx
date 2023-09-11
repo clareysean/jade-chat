@@ -23,25 +23,33 @@ export default function ChatRoom() {
     const [displayUser, setDisplayUser] = useContext(DisplayUserContext)
     const socket = useContext(WebSocketContext)
 
+    const refreshState = async (updatedCurrent) => {
+        const fetchedConvos = await getConvos()
+        console.log(updatedCurrent) //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
+        setConvos(fetchedConvos)
+        setCurrentConvo(updatedCurrent)
+    }
+
     useEffect(() => {
         async function fetchConvos() {
             const fetchedConvos = await getConvos()
+            console.log(fetchedConvos)
             setConvos(fetchedConvos)
         }
         fetchConvos()
-    }, [currentConvo])
+    }, [])
 
     useEffect(() => {
         // Add a listener for the receive_message event
         socket.on('receive_message', (message) => {
             // Use functional update for setCurrentConvo to ensure access to latest state
             setCurrentConvo((prevCurrentConvo) => {
+                console.log(`i ran`)
                 const dummyConvo = { ...prevCurrentConvo }
                 dummyConvo.messages.push(message)
                 return dummyConvo
             })
         })
-
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
             setCurrentConvo(data.dummyConvo)
@@ -50,7 +58,6 @@ export default function ChatRoom() {
         socket.on('convo_add', (data) => {
             setCurrentConvo(data.dummyConvo)
         })
-
         // Clean up the listener when the component unmounts
         return () => {
             socket.off('receive_message')
@@ -67,12 +74,6 @@ export default function ChatRoom() {
         return true
     }
 
-    const refreshState = async (updatedCurrent) => {
-        const fetchedConvos = await getConvos() //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
-        setConvos(fetchedConvos)
-        setCurrentConvo(updatedCurrent)
-    }
-
     const handleCreateConvo = async () => {
         const newDummyConvo = {
             users: [{ _id: user._id, name: user.name }],
@@ -81,7 +82,6 @@ export default function ChatRoom() {
             dummy: true,
         }
         setConvos([...convos, newDummyConvo])
-        setCurrentConvo(newDummyConvo)
         const updatedConvo = await createConvo()
         refreshState(updatedConvo)
     } // create dummy convo with current user name stored in user context {users:[{_id:user._id name:user.name}]}
@@ -100,17 +100,17 @@ export default function ChatRoom() {
             // push dummy user object to dummy currentConvo users array
             dummyConvo.users.push(userToAdd)
 
-            // const updatedConvos = [...convos]
+            const updatedConvos = [...convos]
 
-            // const index = updatedConvos.findIndex(
-            //     (convo) => convo._id === currentConvo._id
-            // )
+            const index = updatedConvos.findIndex(
+                (convo) => convo._id === currentConvo._id
+            )
 
-            // if (index !== -1) {
-            //     updatedConvos[index] = dummyConvo
-            //     setCurrentConvo(dummyConvo)
-            //     setConvos(updatedConvos)
-            // }
+            if (index !== -1) {
+                updatedConvos[index] = dummyConvo
+                setCurrentConvo(dummyConvo)
+                setConvos(updatedConvos)
+            }
 
             socket.emit('convo_add', {
                 convo: {
@@ -158,8 +158,8 @@ export default function ChatRoom() {
         // dummy convos is convos filtered by convoId, set then call refresh OR ...just set convos to filtered and current to null
         const updatedConvos = convos.filter((convo) => convo._id !== convoId)
         setConvos(updatedConvos)
-        setCurrentConvo(null)
-        removeConvo(convoId)
+        await removeConvo(convoId)
+        refreshState(null)
     }
 
     const deleteMessage = async (msgId) => {
@@ -173,7 +173,7 @@ export default function ChatRoom() {
         const updatedConvos = [...convos]
 
         const index = updatedConvos.findIndex(
-            (convo) => convo._id === currentConvo._id
+            (convo) => convo._id === currentConvo._id // is this going to produce an accurate match?
         )
 
         if (index !== -1) {
@@ -191,15 +191,18 @@ export default function ChatRoom() {
     const sendMessage = async (convoId, msgText) => {
         socket.emit('send_message', {
             message: {
-                user: user._id,
+                user: {
+                    _id: user._id,
+                    name: user.name,
+                    profilePictureUrl: user.profilePictureUrl,
+                },
                 text: msgText,
-                userName: user.name,
-                pictureUrl: user.profilePictureUrl,
+                dummy: true,
             },
             room: convoId, // Use the conversation ID as the room name
         })
-        const updatedconvo = await sendMsg(convoId, msgText)
-        refreshState(updatedconvo)
+        const updatedConvo = await sendMsg(convoId, msgText)
+        refreshState(updatedConvo) // this call was returning unpopulated messages
     }
 
     return (

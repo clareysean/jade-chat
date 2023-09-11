@@ -84,7 +84,7 @@ export default function ChatWindow({
 
             <div
                 id="chat-window"
-                className="w-md grid h-[83%] justify-items-end overflow-auto rounded-lg border-b-2 border-slate-100 bg-white"
+                className="w-md h-[83%] justify-items-end overflow-auto rounded-lg border-b-2 border-slate-100 bg-white"
             >
                 {currentConvo?.messages.map((message) => (
                     <MessageCard

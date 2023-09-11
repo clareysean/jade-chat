@@ -91,6 +91,11 @@ async function addToConvo(req, res) {
             { $addToSet: { users: userId } },
             { new: true } // returns the updated conversation document
         )
+            .populate('users')
+            .populate({
+                path: 'messages.user',
+                model: 'User',
+            })
         await updatedConversation.populate(['users', { path: 'users' }])
         console.log(updatedConversation)
         return res.json(updatedConversation)
@@ -105,11 +110,17 @@ async function removeFromConvo(req, res) {
         const userId = req.params.contactId
         const convoId = req.params.convoId
 
+        // Find and update the conversation while populating 'users' and 'messages.user'
         const updatedConversation = await Conversation.findByIdAndUpdate(
             convoId,
-            { $pull: { users: userId } }, // $pull removes the user object id from the users array
+            { $pull: { users: userId } },
             { new: true }
-        ).populate('users')
+        )
+            .populate('users')
+            .populate({
+                path: 'messages.user',
+                model: 'User',
+            })
 
         if (!updatedConversation) {
             return res.status(404).json({ error: 'Conversation not found' })
@@ -122,6 +133,7 @@ async function removeFromConvo(req, res) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
+
 async function uploadPhoto(req, res) {
     const file = req.files.file
     const fileExtension = file.name.split('.').pop() // Get the file extension

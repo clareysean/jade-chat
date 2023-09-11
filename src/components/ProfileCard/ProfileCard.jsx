@@ -1,11 +1,13 @@
 import { React, useContext, useState, useEffect } from 'react'
-import { getDisplayUser } from '../../utilities/users-api'
+import { getDisplayUser, cleanMessages } from '../../utilities/users-api'
 import { DisplayUserContext } from '../../pages/App/App'
 import { uploadImage } from '../../utilities/users-api'
 import { deletePhotoFromDB, getUser } from '../../utilities/users-service'
+import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ProfileCard() {
     const [displayUser, setDisplayUser] = useContext(DisplayUserContext)
+    const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [imgFile, setImgFile] = useState()
     const [error, setError] = useState('')
 
@@ -30,7 +32,8 @@ export default function ProfileCard() {
         formData.append('file', imgFile)
         try {
             await uploadImage(formData)
-            fetchDisplayUser()
+            await fetchDisplayUser()
+            getUser()
             // set user as updated user returned
         } catch (error) {
             console.error('Error uploading image:', error)
@@ -41,7 +44,9 @@ export default function ProfileCard() {
     const handleDeleteProfilePicture = async () => {
         console.log(displayUser.profilePictureUrl)
         await deletePhotoFromDB(displayUser.profilePictureUrl)
-        fetchDisplayUser()
+        await cleanMessages(currentConvo._id, displayUser._id)
+        await fetchDisplayUser()
+        getUser()
     }
 
     return (

@@ -38,3 +38,7 @@ export function deletePhoto(fileName) {
 export function getDisplayUser() {
     return sendRequest(`${BASE_URL}/user`, 'GET')
 }
+
+export function cleanMessages(convoId, userId) {
+    return sendRequest(`${BASE_URL}/messages/${convoId}/${userId}`)
+}

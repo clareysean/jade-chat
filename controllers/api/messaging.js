@@ -16,10 +16,14 @@ async function getAllConvos(req, res) {
         const userConvos = await Conversation.find({
             users: { $in: [currentUserId] },
         })
-            .lean()
-            .populate('users') // populate the 'users' field with user documents
+            .populate('users')
+            .populate({
+                path: 'messages.user',
+                model: 'User',
+            })
 
         res.json(userConvos)
+        console.log(userConvos)
     } catch (error) {
         console.error('Error:', error)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -61,12 +65,20 @@ async function deleteConvo(req, res) {
 async function addMessage(req, res) {
     try {
         const convoId = req.params.convoId
-        const conversation =
-            await Conversation.findById(convoId).populate('users')
+
+        // Query the conversation and populate 'users' and 'messages.user'
+        const conversation = await Conversation.findById(convoId)
+            .populate('users')
+            .populate({
+                path: 'messages.user', // Populate the 'user' field within the 'messages' array
+                model: 'User', // Specify the model to use for populating the user
+            })
 
         if (!conversation) {
             return res.status(404).json({ error: 'Conversation not found' })
         }
+
+        // Create a message without populating the 'user' field
         const message = await Message.create({
             text: req.body.message,
             user: req.user._id,
@@ -75,8 +87,12 @@ async function addMessage(req, res) {
             conversation: convoId,
         })
 
+        // Populate the 'user' field of the newly created message
+        await message.populate('user')
+
         conversation.messages.push(message)
         await conversation.save()
+
         return res.json(conversation)
     } catch (error) {
         console.error('Error:', error)
@@ -89,18 +105,25 @@ async function deleteMsg(req, res) {
     const msgId = req.params.msgId
 
     try {
+        // Find and update the conversation while populating 'users' and 'messages.user'
         const updatedConversation = await Conversation.findByIdAndUpdate(
             convoId,
             { $pull: { messages: { _id: msgId } } },
             { new: true }
-        ).populate('users')
-
-        await Message.findByIdAndDelete(msgId)
+        )
+            .populate('users')
+            .populate({
+                path: 'messages.user',
+                model: 'User',
+            })
 
         if (!updatedConversation) {
             return res.status(404).json({ error: 'Conversation not found' })
         }
 
+        await Message.findByIdAndDelete(msgId)
+
+        console.log(updatedConversation)
         res.json(updatedConversation)
     } catch (error) {
         console.error('Error:', error)

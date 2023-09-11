@@ -9,8 +9,8 @@ const messageSchema = new Schema(
     {
         text: { type: String, required: true },
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-        userName: { type: String, required: true },
-        pictureUrl: { type: String },
+        // userName: { type: String, required: true },
+        // pictureUrl: { type: String }, // these arent't necessary with the current refactor. Icebox test and confirm redundancy
         conversation: {
             type: Schema.Types.ObjectId,
             required: true,

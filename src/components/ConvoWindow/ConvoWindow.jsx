@@ -25,7 +25,10 @@ export default function ConvoWindow({
                     ? convos.map((convo) => (
                           <ConvoCard
                               handleConvoSelect={handleConvoSelect}
-                              deleteConvo={() => deleteConvo(convo._id)}
+                              deleteConvo={(e) => {
+                                  e.stopPropagation()
+                                  deleteConvo(convo._id)
+                              }}
                               key={convo._id}
                               convo={convo}
                           />
