@@ -8,7 +8,11 @@ export default function MessageCard({ message, handleDeleteMessage }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
 
     return (
-        <div className="h-fit-content m-2 flex w-5/6 items-end gap-3 rounded-full bg-slate-200 p-4 text-left shadow-sm">
+        <div
+            className={`h-fit-content m-2 flex w-5/6 items-end gap-3 rounded-full bg-slate-200 p-4 text-left shadow-sm ${
+                message.user === user._id ? 'justify-self-start' : ''
+            }`}
+        >
             {message.user === user._id ? null : (
                 <p className="grow rounded-lg bg-white p-2">{message.text}</p>
             )}
