@@ -19,21 +19,21 @@ export default function ContactCard({
     }
 
     return (
-        <div className="bg-emerald m-2 flex h-24 space-x-12 rounded p-6 shadow-md">
-            {contact.profilePictureUrl ? (
-                <img
-                    className="mx-auto inline h-10 w-10 rounded-full"
-                    src={contact.profilePictureUrl}
-                    alt={`${contact.name}'s picture`}
-                />
-            ) : (
-                ''
-            )}
-            <h2>{contact.name}</h2>
+        <div className="h-fit-content m-2 flex flex-wrap items-center justify-between rounded-md bg-slate-100 px-2 shadow-sm">
+            <div>
+                {contact.profilePictureUrl ? (
+                    <img
+                        className="mx-2 my-3 inline h-10 w-10 rounded-full"
+                        src={contact.profilePictureUrl}
+                        alt={`${contact.name}'s picture`}
+                    />
+                ) : null}
+                <span>{contact.name}</span>
+            </div>
             {isUserInConvo() ? (
                 <button
                     disabled={currentConvo?.dummy === true}
-                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                    className="btn-primary my-1 rounded p-2 text-xs text-white"
                     onClick={handleRemoveFromConvo}
                 >
                     Remove from chat
@@ -41,7 +41,7 @@ export default function ContactCard({
             ) : (
                 <button
                     disabled={currentConvo?.dummy === true}
-                    className="btn my-1 rounded bg-emerald-600 p-2 text-xs text-white"
+                    className="btn-primary my-1 rounded p-2 text-xs text-white"
                     onClick={handleAddToConvo}
                 >
                     Add to chat

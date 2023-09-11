@@ -20,9 +20,9 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
     }
 
     return (
-        <div className="menu-card text-left text-slate-600">
-            <h1>Users</h1>
-            <div className="h-4/5 rounded-lg bg-white p-2">
+        <div className="menu-card min-h-content flex flex-col overflow-auto text-left text-sm text-slate-600">
+            &nbsp;Users
+            <div className="grow rounded-lg bg-white p-2">
                 {activeUsers.map((user) => (
                     <ContactCard
                         handleAddToConvo={() =>
@@ -43,8 +43,7 @@ export default function ContactsWindow({ addToConvo, removeFromConvo }) {
                     />
                 ))}
             </div>
-
-            <p className="error-message">&nbsp;{error}</p>
+            {error ? <p className="error-message">&nbsp;{error}</p> : null}
         </div>
     )
 }

@@ -18,9 +18,9 @@ export default function ConvoWindow({
     }
 
     return (
-        <div className="menu-card text-left text-slate-600">
-            Conversations
-            <div className="h-4/5 rounded-lg bg-white p-2">
+        <div className="menu-card min-h-content flex h-5/6 flex-col text-left text-sm text-slate-600">
+            &nbsp;Conversations
+            <div className="grow rounded-lg bg-white p-2">
                 {convos
                     ? convos.map((convo) => (
                           <ConvoCard

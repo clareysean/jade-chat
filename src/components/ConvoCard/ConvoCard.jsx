@@ -17,7 +17,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             }
             onClick={(e) => handleConvoSelect(e, convo)}
         >
-            <div>
+            <div className="text-base">
                 {convo.users.map((user, i) => (
                     <Fragment key={user._id}>
                         {user.profilePictureUrl && (
@@ -38,7 +38,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             {user._id === convo.createdByUser ? (
                 <button
                     disabled={convo?.dummy === true}
-                    className="btn my-1 rounded bg-red-200 p-2 text-xs text-slate-900 hover:bg-red-300"
+                    className="btn my-1 rounded-full bg-red-200 p-2 text-xs text-slate-900 hover:bg-red-300"
                     onClick={deleteConvo}
                 >
                     <ReactLogo />

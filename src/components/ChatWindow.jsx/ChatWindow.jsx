@@ -48,13 +48,16 @@ export default function ChatWindow({
     return (
         <div
             id="container"
-            className="min-h-content h-5/6 w-1/2 rounded-lg bg-slate-100 bg-white p-2"
+            className="min-h-content flex h-[83.5%] w-1/2 flex-col rounded-lg  border-4 border-slate-100 bg-slate-100 bg-white"
         >
-            <div className="flex px-4 py-1">
-                <div className="min-h-[40px]">
+            <div className="flex py-1 pl-2 pr-1">
+                <div className="no-wrap min-h-[40px]">
                     {currentConvo
                         ? currentConvo.users.map((user, i) => (
-                              <div className="text-slate-600" key={user._id}>
+                              <div
+                                  className="inline text-sm text-slate-600"
+                                  key={user._id}
+                              >
                                   <span>
                                       {user.name}
                                       {i < convoUsersLength - 1 ? ',' : ''}
@@ -72,7 +75,7 @@ export default function ChatWindow({
                         onClick={() => {
                             handleLeaveConvo(displayUser._id)
                         }}
-                        className="rounded bg-red-200 p-1"
+                        className="h-8 rounded bg-red-200 px-2 hover:bg-red-300"
                     >
                         Leave chat
                     </button>
@@ -81,7 +84,7 @@ export default function ChatWindow({
 
             <div
                 id="chat-window"
-                className="w-md h-4/5 overflow-auto rounded-lg bg-white shadow-lg"
+                className="w-md h-[83%] overflow-auto rounded-lg border-b-2 border-slate-100 bg-white"
             >
                 {currentConvo?.messages.map((message) => (
                     <MessageCard
@@ -94,7 +97,7 @@ export default function ChatWindow({
                 ))}
             </div>
 
-            <div className="flex rounded-lg bg-slate-100 p-2 shadow-md">
+            <div className="flex grow rounded-lg">
                 <form
                     className="flex w-full justify-between"
                     autoComplete="off"
