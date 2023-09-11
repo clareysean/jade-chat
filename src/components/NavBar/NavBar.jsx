@@ -14,7 +14,7 @@ export default function NavBar() {
     }
 
     return (
-        <nav className="mb-5 flex justify-center text-lg text-slate-500">
+        <nav className="mb-5 mt-5 flex justify-center text-lg text-slate-500">
             <ReactLogo className="h-10 w-10 pb-2" />
             <span>Welcome, {user.name}</span>
             &nbsp; | &nbsp;

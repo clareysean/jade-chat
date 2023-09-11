@@ -78,7 +78,13 @@ export default function ChatRoom() {
 
     const handleCreateConvo = async () => {
         const newDummyConvo = {
-            users: [{ _id: user._id, name: user.name }],
+            users: [
+                {
+                    _id: user._id,
+                    name: user.name,
+                    profilePictureUrl: user.profilePictureUrl,
+                },
+            ],
             createdByUser: user._id,
             messages: [],
             dummy: true,

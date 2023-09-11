@@ -27,16 +27,7 @@ export default function App() {
             const fetchedUser = await getUser() // from auth token
             setUser(fetchedUser)
         }
-        async function fetchDisplayUser() {
-            if (user) {
-                const fetchedDisplayUser = await getDisplayUser() // from db
-                setDisplayUser(fetchedDisplayUser)
-            }
-        }
-
         fetchUser()
-        fetchDisplayUser()
-
         // Create the WebSocket connection here with proper cleanup
         const socketInstance = io('http://localhost:3001')
         setSocket(socketInstance)
@@ -55,6 +46,16 @@ export default function App() {
             }
         }
         fetchActiveUsers()
+    }, [user])
+
+    useEffect(() => {
+        async function fetchDisplayUser() {
+            if (user) {
+                const fetchedDisplayUser = await getDisplayUser() // from db
+                setDisplayUser(fetchedDisplayUser)
+            }
+        }
+        fetchDisplayUser()
     }, [user])
 
     return (
