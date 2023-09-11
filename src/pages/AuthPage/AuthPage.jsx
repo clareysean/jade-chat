@@ -13,7 +13,7 @@ export default function AuthPage() {
                 </div>
 
                 {/* Right Column for Forms */}
-                <div className="flex w-full flex-col items-center justify-center px-10 md:w-1/2">
+                <div className="mx-5 flex w-full flex-col items-center justify-center px-10 md:w-1/2">
                     <div className="m-4 rounded-lg bg-white p-4 shadow-md">
                         {/* Sign Up Form */}
                         <SignUpForm />

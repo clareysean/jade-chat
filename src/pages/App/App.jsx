@@ -9,7 +9,7 @@ import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
+// const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
 
 export const UserContext = createContext([])
 export const DisplayUserContext = createContext([])
@@ -20,6 +20,7 @@ export default function App() {
     const [user, setUser] = useState(null) // from token
     const [displayUser, setDisplayUser] = useState(null)
     const [activeUsers, setActiveUsers] = useState([])
+    const [socket, setSocket] = useState(null)
 
     useEffect(() => {
         async function fetchUser() {
@@ -27,28 +28,32 @@ export default function App() {
             setUser(fetchedUser)
         }
         async function fetchDisplayUser() {
-            const fetchedDisplayUser = await getDisplayUser() // from db
-            setDisplayUser(fetchedDisplayUser)
+            if (user) {
+                const fetchedDisplayUser = await getDisplayUser() // from db
+                setDisplayUser(fetchedDisplayUser)
+            }
         }
 
         fetchUser()
         fetchDisplayUser()
 
         // Create the WebSocket connection here with proper cleanup
-        const socket = io('http://localhost:3001')
+        const socketInstance = io('http://localhost:3001')
+        setSocket(socketInstance)
 
         // Cleanup the WebSocket connection when the component unmounts
         return () => {
-            socket.disconnect()
+            socketInstance.disconnect()
         }
     }, [])
 
     useEffect(() => {
         async function fetchActiveUsers() {
-            const fetchedActiveUsers = await getActiveUsers()
-            setActiveUsers(fetchedActiveUsers)
+            if (user) {
+                const fetchedActiveUsers = await getActiveUsers()
+                setActiveUsers(fetchedActiveUsers)
+            }
         }
-
         fetchActiveUsers()
     }, [user])
 
@@ -59,7 +64,7 @@ export default function App() {
                     value={[displayUser, setDisplayUser]}
                 >
                     <UserContext.Provider value={[user, setUser]}>
-                        <main className="App mt-5 h-4/5 w-full">
+                        <main className="App h-4/5 w-full">
                             {user ? (
                                 <>
                                     <NavBar />
