@@ -41,7 +41,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             </div>
             {user._id === convo.createdByUser ? (
                 <button
-                    disabled={disable === true}
+                    disabled={currentConvo?.dummy === true || disable === true}
                     className="btn my-1 rounded-full bg-red-200 p-2 text-xs text-slate-900 hover:bg-red-300"
                     onClick={deleteConvo}
                 >
