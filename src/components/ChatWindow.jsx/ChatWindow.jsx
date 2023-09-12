@@ -1,4 +1,4 @@
-import { React, useState, useContext } from 'react'
+import { React, useState, useContext, useEffect } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import MessageCard from '../MessageCard/MessageCard'
 import { DisplayUserContext } from '../../pages/App/App'
@@ -8,6 +8,7 @@ export default function ChatWindow({
     handleSendMessage,
     deleteMessage,
     removeFromConvo,
+    chatWindowRef,
 }) {
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
@@ -15,6 +16,15 @@ export default function ChatWindow({
     const [error, setError] = useState('')
 
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
+
+    console.log(currentConvo?.dummy)
+
+    useEffect(() => {
+        // console.log(`effect Ran for SCCROLLLL`)
+        if (chatWindowRef.current) {
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
+        }
+    }, [currentConvo?.messages])
 
     const handleSubmitMessage = (e) => {
         e.preventDefault()
@@ -28,6 +38,7 @@ export default function ChatWindow({
     const submitOnEnter = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
+            if (currentConvo?.dummy === true) return
             handleSubmitMessage(e)
         }
     }
@@ -75,7 +86,7 @@ export default function ChatWindow({
                         onClick={() => {
                             handleLeaveConvo(displayUser._id)
                         }}
-                        className="h-8 rounded bg-red-200 px-2 hover:bg-red-300"
+                        className="h-10 rounded bg-red-200 px-2 shadow hover:bg-red-300"
                     >
                         Leave chat
                     </button>
@@ -84,7 +95,8 @@ export default function ChatWindow({
 
             <div
                 id="chat-window"
-                className="w-md h-[83%] justify-items-end overflow-auto rounded-lg border-b-2 border-slate-100 bg-white"
+                className="w-md h-[83%] justify-items-end overflow-auto rounded-lg border-y-2 border-slate-100 bg-white"
+                ref={chatWindowRef}
             >
                 {currentConvo?.messages.map((message) => (
                     <MessageCard

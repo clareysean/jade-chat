@@ -1,4 +1,11 @@
-import { React, useEffect, useState, useContext, createContext } from 'react'
+import {
+    React,
+    useEffect,
+    useState,
+    useContext,
+    createContext,
+    useRef,
+} from 'react'
 import { addUserToConvo } from '../../utilities/users-service'
 import { removeUserFromConvo } from '../../utilities/users-api'
 import {
@@ -21,7 +28,10 @@ export default function ChatRoom() {
     const [error, setError] = useState('')
     const [user, setUser] = useContext(UserContext)
     const [displayUser, setDisplayUser] = useContext(DisplayUserContext)
+    const chatWindowRef = useRef(null)
     const socket = useContext(WebSocketContext)
+
+    console.log(currentConvo?.dummy)
 
     const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos()
@@ -34,7 +44,6 @@ export default function ChatRoom() {
     useEffect(() => {
         async function fetchConvos() {
             const fetchedConvos = await getConvos()
-            console.log(fetchedConvos)
             setConvos(fetchedConvos)
         }
         fetchConvos()
@@ -45,19 +54,19 @@ export default function ChatRoom() {
         socket.on('receive_message', (message) => {
             // Use functional update for setCurrentConvo to ensure access to latest state
             setCurrentConvo((prevCurrentConvo) => {
+                console.log(`receive ran`)
                 const dummyConvo = { ...prevCurrentConvo }
+                dummyConvo['dummy'] = true
                 dummyConvo.messages.push(message)
                 return dummyConvo
             })
         })
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
-
             refreshState(data.updatedConvo)
         })
 
         socket.on('convo_add', (data) => {
-            console.log(`convo add ran`)
             refreshState(data.updatedConvo)
         })
         // Clean up the listener when the component unmounts
@@ -119,7 +128,6 @@ export default function ChatRoom() {
                 setCurrentConvo(dummyConvo)
                 setConvos(updatedConvos)
             }
-
             // update state then...
             //call backend and update convo doc
             const convoId = currentConvo._id
@@ -159,11 +167,12 @@ export default function ChatRoom() {
     }
 
     const deleteConvo = async (convoId) => {
-        // dummy convos is convos filtered by convoId, set then call refresh OR ...just set convos to filtered and current to null
         const updatedConvos = convos.filter((convo) => convo._id !== convoId)
         setConvos(updatedConvos)
         await removeConvo(convoId)
-        refreshState(null)
+        if (currentConvo?._id === convoId) {
+            refreshState(null)
+        }
     }
 
     const deleteMessage = async (msgId) => {
@@ -206,11 +215,12 @@ export default function ChatRoom() {
             room: convoId, // Use the conversation ID as the room name
         })
         const updatedConvo = await sendMsg(convoId, msgText)
-        refreshState(updatedConvo) // this call was returning unpopulated messages
+        // setCurrentConvo(updatedConvo)
+        refreshState(updatedConvo)
     }
 
     return (
-        <div className="container flex h-screen w-full gap-2">
+        <div className="container flex h-screen w-full gap-2 overflow-hidden">
             <ConvoContext.Provider value={[currentConvo, setCurrentConvo]}>
                 <ConvoWindow
                     convos={convos}
@@ -222,6 +232,7 @@ export default function ChatRoom() {
                     handleSendMessage={sendMessage}
                     deleteMessage={deleteMessage}
                     removeFromConvo={removeFromConvo}
+                    chatWindowRef={chatWindowRef}
                 />
                 <ContactsWindow
                     addToConvo={addToConvo}
