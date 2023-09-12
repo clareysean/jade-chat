@@ -1,8 +1,11 @@
-Certainly! Here's the modified README for your Jade Chat application:
+# Jade Chat - Instant Messaging App
 
-# Jade Chat - Real-Time Messaging App
+Welcome to Jade Chat, a real-time messaging application built using the MERN stack. The application uses web sockets via [socket.io](https://socket.io/) to enable real-time messaging between users. Jade Chat lets users add and remove contacts to their chat room and upload a an avatar. Planned future enhancements include room and contact search, attachment support, and notifications.
 
-Welcome to Jade Chat, a real-time messaging application built using the MERN stack. The application incorporates socket.io to enable real-time messaging between users. Jade Chat enables users to communicate in real time, add and remove contacts to their chat room, add an avatar, and offers the potential for various enhancements such as room and contact search, attachment support, and notifications.
+Launch the deployed app: [Here](https://jade-chat-f37f785f9c0d.herokuapp.com/)
+
+![auth page](https://i.imgur.com/gR1YA6K.png)
+![chat room](https://i.imgur.com/EHrfPCc.png)
 
 ## Table of Contents
 
@@ -29,15 +32,14 @@ Welcome to Jade Chat, a real-time messaging application built using the MERN sta
 
 Before you start, ensure you have the following prerequisites:
 
--   Node.js and npm installed. You can download them from [nodejs.org](https://nodejs.org/).
--   MongoDB installed and running. Visit [mongodb.com](https://www.mongodb.com/) for installation instructions.
+-   Node.js and npm installed: [nodejs.org](https://nodejs.org/).
 
 ### Installation
 
 1. Clone this repository to your local machine using:
 
     ```
-    git clone https://github.com/your-username/jade-chat
+    git clone https://github.com/clareysean/jade-chat.git
     ```
 
 2. Navigate to the project directory:
@@ -52,32 +54,50 @@ Before you start, ensure you have the following prerequisites:
     npm install
     ```
 
-4. Configure the environment variables as needed.
+4. Configure the environment variables as needed. These will include the keys, urls, and secrets from:
+
+    - [MondoDB Atlas](https://www.mongodb.com/cloud/atlas/register).
+    - [AWS S3](https://aws.amazon.com/)
 
 5. Start the development server:
+
+    ```
+    node server.js
+    ```
+
+6. Start the react app:
 
     ```
     npm start
     ```
 
-6. Open your web browser and visit `http://localhost:3000` to use Jade Chat locally.
+7. Open your web browser and visit `http://localhost:3000` to use Jade Chat locally.
+
+8. To run your production build:
+
+    ```
+    npm run build
+    node server.js
+    ```
+
+    Navigate to your specified port configured in .env
 
 ## Authentication
 
-Jade Chat employs token-based authentication, utilizing JSON Web Tokens (JWT) for secure user authentication. This ensures the protection of sensitive user data and APIs.
+-   Jade Chat employs token-based authentication, utilizing JSON Web Tokens (JWT) for secure user authentication. This ensures the protection of sensitive user data and protected routes on the API.
 
 ## Future Enhancements
 
 Here are some potential enhancements for Jade Chat:
 
--   **Search Features**: Implement search functionality for rooms and contacts to enhance user experience.
+-   **Search Features**: Implement search functionality for rooms and contacts.
 -   **Attachment Support**: Enable users to send and receive attachments, such as images and files.
--   **Notifications**: Add notification features to keep users informed about new messages and activities.
+-   **Notifications**: Add notification features to keep users informed about new messages.
 
 ## Contributing
 
-Contributions to Jade Chat are encouraged! If you have suggestions, improvements, or feature ideas, please open an issue or submit a pull request. Your contributions can help make Jade Chat even better.
+Contributions to Jade Chat are encouraged! If you have suggestions, improvements, or feature ideas, please open an issue or submit a pull request :)
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as needed.
+This project is licensed under the [MIT License](LICENSE).
