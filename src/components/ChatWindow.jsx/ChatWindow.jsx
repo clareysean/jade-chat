@@ -1,5 +1,5 @@
 import { React, useState, useContext, useEffect } from 'react'
-import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { ConvoContext, DisableContext } from '../../pages/ChatRoom/ChatRoom'
 import MessageCard from '../MessageCard/MessageCard'
 import { DisplayUserContext } from '../../pages/App/App'
 import { ReactComponent as ReactLogo } from '../../images/send-alt-1-svgrepo-com.svg'
@@ -13,11 +13,19 @@ export default function ChatWindow({
     const [messageText, setMessageText] = useState('')
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [displayUser, getDisplayUser] = useContext(DisplayUserContext)
+    const [disable, setDisable] = useContext(DisableContext)
     const [error, setError] = useState('')
 
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
 
     console.log(currentConvo?.dummy)
+
+    const onFocus = () => {
+        console.log('Tab is in focus')
+        if (chatWindowRef.current) {
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
+        }
+    }
 
     useEffect(() => {
         // console.log(`effect Ran for SCCROLLLL`)
@@ -25,6 +33,16 @@ export default function ChatWindow({
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
         }
     }, [currentConvo?.messages])
+
+    useEffect(() => {
+        window.addEventListener('focus', onFocus)
+        // Calls onFocus when the window first loads
+        onFocus()
+        // Specify how to clean up after this effect:
+        return () => {
+            window.removeEventListener('focus', onFocus)
+        }
+    }, [])
 
     const handleSubmitMessage = (e) => {
         e.preventDefault()
@@ -38,7 +56,7 @@ export default function ChatWindow({
     const submitOnEnter = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
-            if (currentConvo?.dummy === true) return
+            if (disable === true) return
             handleSubmitMessage(e)
         }
     }
@@ -128,7 +146,7 @@ export default function ChatWindow({
                         required
                     />
                     <button
-                        disabled={currentConvo?.dummy === true}
+                        disabled={disable === true}
                         className="btn-primary"
                         type="submit"
                     >

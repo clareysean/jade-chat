@@ -21,17 +21,26 @@ import ContactsWindow from '../../components/ContactsWindow/ContactsWindow'
 import { DisplayUserContext, UserContext, WebSocketContext } from '../App/App'
 
 export const ConvoContext = createContext([])
+export const DisableContext = createContext()
 
 export default function ChatRoom() {
     const [convos, setConvos] = useState(null)
     const [currentConvo, setCurrentConvo] = useState(null)
     const [error, setError] = useState('')
+    const [disable, setDisable] = useState(false)
     const [user, setUser] = useContext(UserContext)
     const [displayUser, setDisplayUser] = useContext(DisplayUserContext)
     const chatWindowRef = useRef(null)
     const socket = useContext(WebSocketContext)
 
     console.log(currentConvo?.dummy)
+
+    const enableAndDisable = () => {
+        setDisable(true)
+        setTimeout(() => {
+            setDisable(false)
+        }, 1500)
+    }
 
     const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos()
@@ -54,12 +63,11 @@ export default function ChatRoom() {
         socket.on('receive_message', (message) => {
             // Use functional update for setCurrentConvo to ensure access to latest state
             setCurrentConvo((prevCurrentConvo) => {
-                console.log(`receive ran`)
                 const dummyConvo = { ...prevCurrentConvo }
-                dummyConvo['dummy'] = true
                 dummyConvo.messages.push(message)
                 return dummyConvo
             })
+            enableAndDisable()
         })
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
@@ -212,33 +220,35 @@ export default function ChatRoom() {
                 text: msgText,
                 dummy: true,
             },
-            room: convoId, // Use the conversation ID as the room name
+            room: convoId,
+            // Use the conversation ID as the room name
         })
         const updatedConvo = await sendMsg(convoId, msgText)
-        // setCurrentConvo(updatedConvo)
         refreshState(updatedConvo)
     }
 
     return (
         <div className="container flex h-screen w-full gap-2 overflow-hidden">
-            <ConvoContext.Provider value={[currentConvo, setCurrentConvo]}>
-                <ConvoWindow
-                    convos={convos}
-                    handleCreateConvo={handleCreateConvo}
-                    deleteConvo={deleteConvo}
-                    removeFromConvo={removeFromConvo}
-                />
-                <ChatWindow
-                    handleSendMessage={sendMessage}
-                    deleteMessage={deleteMessage}
-                    removeFromConvo={removeFromConvo}
-                    chatWindowRef={chatWindowRef}
-                />
-                <ContactsWindow
-                    addToConvo={addToConvo}
-                    removeFromConvo={removeFromConvo}
-                />
-            </ConvoContext.Provider>
+            <DisableContext.Provider value={[disable, setDisable]}>
+                <ConvoContext.Provider value={[currentConvo, setCurrentConvo]}>
+                    <ConvoWindow
+                        convos={convos}
+                        handleCreateConvo={handleCreateConvo}
+                        deleteConvo={deleteConvo}
+                        removeFromConvo={removeFromConvo}
+                    />
+                    <ChatWindow
+                        handleSendMessage={sendMessage}
+                        deleteMessage={deleteMessage}
+                        removeFromConvo={removeFromConvo}
+                        chatWindowRef={chatWindowRef}
+                    />
+                    <ContactsWindow
+                        addToConvo={addToConvo}
+                        removeFromConvo={removeFromConvo}
+                    />
+                </ConvoContext.Provider>
+            </DisableContext.Provider>
         </div>
     )
 }
