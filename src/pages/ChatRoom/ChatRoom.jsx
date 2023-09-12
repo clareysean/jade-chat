@@ -111,7 +111,7 @@ export default function ChatRoom() {
         const currentExists = checkIfCurrentExists()
         if (currentExists) {
             const dummyConvo = { ...currentConvo }
-            dummyConvo.dummy = true
+            dummyConvo['dummy'] = true
             // this boolean value disables send msg button and delete msg button
             const userToAdd = {
                 _id: contactId,
@@ -151,7 +151,7 @@ export default function ChatRoom() {
         const currentExists = checkIfCurrentExists()
         if (currentExists) {
             const dummyConvo = { ...currentConvo }
-            dummyConvo.dummy = true
+            dummyConvo['dummy'] = true
             dummyConvo.users = dummyConvo.users.filter(
                 (user) => user._id !== contactId
             )

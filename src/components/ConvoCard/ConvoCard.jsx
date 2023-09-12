@@ -1,11 +1,12 @@
 import React, { useContext, Fragment } from 'react'
-import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { ConvoContext, DisableContext } from '../../pages/ChatRoom/ChatRoom'
 import { UserContext } from '../../pages/App/App'
 import { ReactComponent as ReactLogo } from '../../images/trash-alt-svgrepo-com.svg'
 
 export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const [user, setUser] = useContext(UserContext)
+    // const [disable, setDisable] = useContext(DisableContext)
     const convoUsersLength = convo.users.length
 
     return (

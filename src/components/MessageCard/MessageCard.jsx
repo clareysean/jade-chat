@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../../pages/App/App'
-import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { ConvoContext, DisableContext } from '../../pages/ChatRoom/ChatRoom'
 import { ReactComponent as ReactLogo } from '../../images/trash-alt-svgrepo-com.svg'
 
 export default function MessageCard({ message, handleDeleteMessage }) {
     const [user, setUser] = useContext(UserContext)
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [disable, setDisable] = useContext(DisableContext)
 
     return (
         <div
@@ -33,7 +34,7 @@ export default function MessageCard({ message, handleDeleteMessage }) {
             ) : null}
             {message.user._id === user._id ? (
                 <button
-                    disabled={currentConvo?.dummy === true}
+                    disabled={disable === true}
                     className="inline-block rounded-full bg-red-200 p-2 text-slate-800 hover:bg-red-300"
                     onClick={handleDeleteMessage}
                 >
