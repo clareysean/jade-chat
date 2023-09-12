@@ -1,6 +1,6 @@
 # Jade Chat - Instant Messaging App
 
-Welcome to Jade Chat, a real-time messaging application built using the MERN stack. The application uses web sockets via [socket.io](https://socket.io/) to enable real-time messaging between users. Jade Chat lets users add and remove contacts to their chat room and upload a an avatar. Planned future enhancements include room and contact search, attachment support, and notifications.
+Welcome to Jade Chat, a real-time messaging application built using the MERN stack. The application uses web sockets via [socket.io](https://socket.io/) to enable real-time messaging between users. Jade Chat lets users add and remove contacts to their chat room and upload an avatar. Planned future enhancements include room and contact search, attachment support, and notifications.
 
 Launch the deployed app: [Here](https://jade-chat-f37f785f9c0d.herokuapp.com/)
 

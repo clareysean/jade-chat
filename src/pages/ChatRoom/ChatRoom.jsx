@@ -104,8 +104,9 @@ export default function ChatRoom() {
         }
         setCurrentConvo(newDummyConvo)
         setConvos([...convos, newDummyConvo])
-        const updatedConvo = await createConvo()
-        refreshState(updatedConvo)
+        const newConvo = await createConvo()
+        socket.emit('join_room', { room: newConvo._id })
+        refreshState(newConvo)
     } // create dummy convo with current user name stored in user context {users:[{_id:user._id name:user.name}]}
 
     const addToConvo = async (contactId, pictureUrl, name) => {
