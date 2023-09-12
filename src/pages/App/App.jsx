@@ -9,8 +9,6 @@ import ProfilePage from '../ProfilePage/ProfilePage'
 import ChatRoom from '../ChatRoom/ChatRoom'
 import { io } from 'socket.io-client'
 
-// const socket = io('http://localhost:3001') // put in useEffect or another lifecycle method
-
 export const UserContext = createContext([])
 export const DisplayUserContext = createContext([])
 export const ActiveUsersContext = createContext([])
@@ -28,8 +26,12 @@ export default function App() {
             setUser(fetchedUser)
         }
         fetchUser()
-        // Create the WebSocket connection here with proper cleanup
-        const socketInstance = io('http://localhost:3001')
+        // Create a WebSocket connection here with cleanup
+        const socketInstance = io(
+            process.env.NODE_ENV === 'production'
+                ? 'https://jade-chat-f37f785f9c0d.herokuapp.com/'
+                : 'http://localhost:3001'
+        )
         setSocket(socketInstance)
 
         // Cleanup the WebSocket connection when the component unmounts

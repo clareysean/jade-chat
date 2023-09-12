@@ -15,7 +15,10 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin:
+            process.env.NODE_ENV === 'production'
+                ? 'https://jade-chat-f37f785f9c0d.herokuapp.com'
+                : 'http://localhost:3000',
         methods: ['GET', 'POST'],
     },
 })
