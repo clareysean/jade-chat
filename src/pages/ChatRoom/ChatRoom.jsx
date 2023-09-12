@@ -102,6 +102,7 @@ export default function ChatRoom() {
             messages: [],
             dummy: true,
         }
+        setCurrentConvo(newDummyConvo)
         setConvos([...convos, newDummyConvo])
         const updatedConvo = await createConvo()
         refreshState(updatedConvo)
@@ -170,6 +171,7 @@ export default function ChatRoom() {
 
     const deleteConvo = async (convoId) => {
         const updatedConvos = convos.filter((convo) => convo._id !== convoId)
+        enableAndDisable()
         setConvos(updatedConvos)
         await removeConvo(convoId)
         if (currentConvo?._id === convoId) {

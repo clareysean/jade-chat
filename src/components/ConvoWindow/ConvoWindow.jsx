@@ -17,6 +17,8 @@ export default function ConvoWindow({
         setCurrentConvo(convo)
     }
 
+    console.log(currentConvo?.dummy)
+
     return (
         <div className="menu-card min-h-content flex h-5/6 flex-col overflow-auto text-left text-sm text-slate-600">
             &nbsp;Conversations

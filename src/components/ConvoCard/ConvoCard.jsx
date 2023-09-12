@@ -5,9 +5,12 @@ import { ReactComponent as ReactLogo } from '../../images/trash-alt-svgrepo-com.
 
 export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [disable, setDisable] = useContext(DisableContext)
     const [user, setUser] = useContext(UserContext)
     // const [disable, setDisable] = useContext(DisableContext)
     const convoUsersLength = convo.users.length
+
+    console.log(currentConvo?.dummy)
 
     return (
         <div
@@ -38,7 +41,7 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
             </div>
             {user._id === convo.createdByUser ? (
                 <button
-                    disabled={convo?.dummy === true}
+                    disabled={disable === true}
                     className="btn my-1 rounded-full bg-red-200 p-2 text-xs text-slate-900 hover:bg-red-300"
                     onClick={deleteConvo}
                 >
