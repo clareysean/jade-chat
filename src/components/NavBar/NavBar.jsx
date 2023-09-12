@@ -14,18 +14,21 @@ export default function NavBar() {
     }
 
     return (
-        <nav className="mb-5 mt-5 flex justify-center text-lg text-slate-500">
-            <ReactLogo className="h-10 w-10 pb-2" />
+        <nav className="mx-auto mb-4 mt-4 flex w-full items-center justify-center rounded-full bg-slate-100 p-2 text-lg text-slate-500 lg:w-2/5">
+            <ReactLogo className="h-10 w-10" />
             <span>Welcome, {user.name}</span>
             &nbsp; | &nbsp;
             <Link
-                className="text-emerald-800 hover:text-emerald-500"
+                className="text-emerald-800 hover:text-emerald-600"
                 to="/profile"
             >
                 Profile
             </Link>
             &nbsp; | &nbsp;
-            <Link className="text-emerald-800 hover:text-emerald-500" to="/">
+            <Link
+                className="rounded-full text-emerald-800 hover:text-emerald-600"
+                to="/"
+            >
                 Chat
             </Link>
             &nbsp; | &nbsp;

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { DisplayUserContext, UserContext } from '../../pages/App/App'
+import { UserContext } from '../../pages/App/App'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import { ReactComponent as ReactLogo } from '../../images/trash-alt-svgrepo-com.svg'
 

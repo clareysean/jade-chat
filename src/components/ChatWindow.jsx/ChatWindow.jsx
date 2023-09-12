@@ -18,17 +18,13 @@ export default function ChatWindow({
 
     const convoUsersLength = currentConvo ? currentConvo?.users.length : 0
 
-    console.log(currentConvo?.dummy)
-
     const onFocus = () => {
-        console.log('Tab is in focus')
         if (chatWindowRef.current) {
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
         }
     }
 
     useEffect(() => {
-        // console.log(`effect Ran for SCCROLLLL`)
         if (chatWindowRef.current) {
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
         }

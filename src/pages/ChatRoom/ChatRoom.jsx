@@ -33,8 +33,6 @@ export default function ChatRoom() {
     const chatWindowRef = useRef(null)
     const socket = useContext(WebSocketContext)
 
-    console.log(currentConvo?.dummy)
-
     const enableAndDisable = () => {
         setDisable(true)
         setTimeout(() => {
@@ -44,8 +42,6 @@ export default function ChatRoom() {
 
     const refreshState = async (updatedCurrent) => {
         const fetchedConvos = await getConvos()
-        console.log(`refresh state ran`)
-        console.log(updatedCurrent)
         setCurrentConvo(updatedCurrent) //this request was slow -> functions refactored to update state before calling db and refreshing state with returned/updated docs
         setConvos(fetchedConvos)
     }
@@ -97,9 +93,9 @@ export default function ChatRoom() {
         const newDummyConvo = {
             users: [
                 {
-                    _id: user._id,
-                    name: user.name,
-                    profilePictureUrl: user.profilePictureUrl,
+                    _id: displayUser._id,
+                    name: displayUser.name,
+                    profilePictureUrl: displayUser.profilePictureUrl,
                 },
             ],
             createdByUser: user._id,
@@ -159,8 +155,6 @@ export default function ChatRoom() {
             dummyConvo.users = dummyConvo.users.filter(
                 (user) => user._id !== contactId
             )
-
-            console.log(dummyConvo)
 
             const convoId = currentConvo._id
             const updatedConvo = await removeUserFromConvo(contactId, convoId)

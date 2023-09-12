@@ -1,6 +1,5 @@
 import { React, useContext } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
-import { DisplayUserContext } from '../../pages/App/App'
 
 export default function ContactCard({
     handleAddToConvo,

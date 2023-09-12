@@ -11,9 +11,6 @@ export default function ConvoWindow({
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
     const socket = useContext(WebSocketContext)
 
-    // console.log(`convo window mounted`)
-    // console.log(convos)
-
     const handleConvoSelect = (e, convo) => {
         if (e.target.nodeName === 'BUTTON') return
         socket.emit('join_room', { room: convo._id })
@@ -21,7 +18,7 @@ export default function ConvoWindow({
     }
 
     return (
-        <div className="menu-card min-h-content flex h-5/6 flex-col text-left text-sm text-slate-600">
+        <div className="menu-card min-h-content flex h-5/6 flex-col overflow-auto text-left text-sm text-slate-600">
             &nbsp;Conversations
             <div className="grow rounded-lg bg-white p-2">
                 {convos

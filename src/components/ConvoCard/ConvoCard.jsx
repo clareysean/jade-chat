@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, Fragment } from 'react'
+import React, { useContext, Fragment } from 'react'
 import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
 import { UserContext } from '../../pages/App/App'
 import { ReactComponent as ReactLogo } from '../../images/trash-alt-svgrepo-com.svg'
@@ -8,14 +8,12 @@ export default function ConvoCard({ convo, handleConvoSelect, deleteConvo }) {
     const [user, setUser] = useContext(UserContext)
     const convoUsersLength = convo.users.length
 
-    // console.log(`COnvo card mount`)
-
     return (
         <div
             className={
                 convo._id === currentConvo?._id
-                    ? 'drop-shadow-[0_3px_3px_rgba(85, 228, 179, 0.8)] h-fit-content m-2 flex flex-wrap items-center justify-between rounded-md bg-slate-300 px-2'
-                    : 'h-fit-content m-2 flex flex-wrap items-center justify-between rounded-md bg-slate-100 px-2 shadow-sm'
+                    ? 'drop-shadow-[0_3px_3px_rgba(85, 228, 179, 0.8)] h-fit-content m-2 flex flex-wrap items-center justify-between rounded-md bg-slate-300 p-2'
+                    : 'h-fit-content m-2 flex flex-wrap items-center justify-between rounded-md bg-slate-100 p-2 shadow-sm'
             }
             onClick={(e) => handleConvoSelect(e, convo)}
         >
