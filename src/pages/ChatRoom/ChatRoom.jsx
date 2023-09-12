@@ -179,7 +179,7 @@ export default function ChatRoom() {
 
     const deleteMessage = async (msgId) => {
         const dummyConvo = { ...currentConvo }
-        dummyConvo.dummy = true
+        dummyConvo['dummy'] = true
 
         dummyConvo.messages = dummyConvo.messages.filter(
             (message) => message._id !== msgId

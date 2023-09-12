@@ -34,7 +34,7 @@ export default function MessageCard({ message, handleDeleteMessage }) {
             ) : null}
             {message.user._id === user._id ? (
                 <button
-                    disabled={disable === true}
+                    disabled={disable === true || currentConvo?.dummy === true}
                     className="inline-block rounded-full bg-red-200 p-2 text-slate-800 hover:bg-red-300"
                     onClick={handleDeleteMessage}
                 >
