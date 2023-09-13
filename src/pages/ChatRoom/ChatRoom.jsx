@@ -67,10 +67,12 @@ export default function ChatRoom() {
         })
         socket.on('convo_leave', (data) => {
             // Use functional updates for setCurrentConvo to ensure access to the latest state
+            enableAndDisable()
             refreshState(data.updatedConvo)
         })
 
         socket.on('convo_add', (data) => {
+            enableAndDisable()
             refreshState(data.updatedConvo)
         })
         // Clean up the listener when the component unmounts

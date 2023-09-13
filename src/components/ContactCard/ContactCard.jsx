@@ -1,5 +1,5 @@
 import { React, useContext } from 'react'
-import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { ConvoContext, DisableContext } from '../../pages/ChatRoom/ChatRoom'
 
 export default function ContactCard({
     handleAddToConvo,
@@ -7,6 +7,7 @@ export default function ContactCard({
     handleRemoveFromConvo,
 }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [disable, setDisable] = useContext(DisableContext)
     const isUserInConvo = () => {
         if (currentConvo && currentConvo.users) {
             // Check if any user in convo.users has the same id as user.id
@@ -31,7 +32,7 @@ export default function ContactCard({
             </div>
             {isUserInConvo() ? (
                 <button
-                    disabled={currentConvo?.dummy === true}
+                    disabled={currentConvo?.dummy === true || disable === true}
                     className="btn-primary my-1 rounded p-2 text-xs text-white"
                     onClick={handleRemoveFromConvo}
                 >
@@ -39,7 +40,7 @@ export default function ContactCard({
                 </button>
             ) : (
                 <button
-                    disabled={currentConvo?.dummy === true}
+                    disabled={currentConvo?.dummy === true || disable === true}
                     className="btn-primary my-1 rounded p-2 text-xs text-white"
                     onClick={handleAddToConvo}
                 >
