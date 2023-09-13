@@ -23,18 +23,15 @@ export default function ChatWindow({
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
         }
     }
+    // scroll doesn't run when receiving
 
     useEffect(() => {
-        if (chatWindowRef.current) {
-            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
-        }
-    }, [currentConvo?.messages])
+        onFocus()
+    }, [currentConvo ? currentConvo : null])
 
     useEffect(() => {
         window.addEventListener('focus', onFocus)
-        // Calls onFocus when the window first loads
         onFocus()
-        // Specify how to clean up after this effect:
         return () => {
             window.removeEventListener('focus', onFocus)
         }
