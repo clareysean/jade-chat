@@ -92,6 +92,9 @@ export default function ChatRoom() {
     }
 
     const handleCreateConvo = async () => {
+        if (currentConvo) {
+            socket.emit('leave_room', { room: currentConvo._id })
+        }
         const newDummyConvo = {
             users: [
                 {
@@ -109,7 +112,7 @@ export default function ChatRoom() {
         const newConvo = await createConvo()
         socket.emit('join_room', { room: newConvo._id })
         refreshState(newConvo)
-    } // create dummy convo with current user name stored in user context {users:[{_id:user._id name:user.name}]}
+    }
 
     const addToConvo = async (contactId, pictureUrl, name) => {
         const currentExists = checkIfCurrentExists()

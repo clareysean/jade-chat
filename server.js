@@ -49,6 +49,10 @@ io.on('connection', (socket) => {
         console.log(`User joined ${room}`)
     })
 
+    socket.on('leave_room', ({ room }) => {
+        socket.leave(room)
+    })
+
     socket.on('send_message', (data) => {
         const { message, room } = data
         io.in(room).emit('receive_message', message) // Send to all users in room, including sender

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import ConvoCard from '../ConvoCard/ConvoCard'
-import { ConvoContext } from '../../pages/ChatRoom/ChatRoom'
+import { ConvoContext, DisableContext } from '../../pages/ChatRoom/ChatRoom'
 import { WebSocketContext } from '../../pages/App/App'
 
 export default function ConvoWindow({
@@ -9,10 +9,14 @@ export default function ConvoWindow({
     deleteConvo,
 }) {
     const [currentConvo, setCurrentConvo] = useContext(ConvoContext)
+    const [disable, setDisable] = useContext(DisableContext)
     const socket = useContext(WebSocketContext)
 
     const handleConvoSelect = (e, convo) => {
-        if (e.target.nodeName === 'BUTTON') return
+        if (e.target.nodeName === 'BUTTON' || disable) return
+        if (currentConvo) {
+            socket.emit('leave_room', { room: currentConvo._id })
+        }
         socket.emit('join_room', { room: convo._id })
         setCurrentConvo(convo)
     }
